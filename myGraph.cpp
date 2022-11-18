@@ -27,17 +27,20 @@ myGraph::myGraph ( string graphName )
         return;
     }
 
+    //read a single value in
     while(fin >> x)
     {
+        //if -1 it is the end of the row
         if ( x == -1 )
         {
+            //push row and clear
             adjMatrix.push_back( tmp );
             tmp.clear( );
         }
+        //push to temp
         else
             tmp.push_back( x );
     }
-
 }
 
 

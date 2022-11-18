@@ -1,0 +1,18 @@
+# ninja log v5
+6	423	6901744571755459	CMakeFiles/Graphs.dir/main.cpp.obj	e34582a88cf128fe
+3	479	6901746220857423	CMakeFiles/Graphs.dir/myGraph.cpp.obj	e1be5b0755f9f0c7
+480	584	6901746221877306	Graphs.exe	928b8fd69fbeda94
+10	460	6901762543739733	CMakeFiles/Graphs.dir/main.cpp.obj	e34582a88cf128fe
+3	600	6901762545143651	CMakeFiles/Graphs.dir/myGraph.cpp.obj	e1be5b0755f9f0c7
+18	11495	6901762653811906	CMakeFiles/Graphs.dir/testCases.cpp.obj	76ef8e214642a76f
+11502	40415	6901762943171273	Graphs.exe	88763dff84094c85
+4	507	6901763102885099	CMakeFiles/Graphs.dir/myGraph.cpp.obj	e1be5b0755f9f0c7
+508	30650	6901763404085475	Graphs.exe	88763dff84094c85
+4	12389	6901765329541428	CMakeFiles/Graphs.dir/testCases.cpp.obj	76ef8e214642a76f
+6	11319	6901765570258379	CMakeFiles/Graphs.dir/main.cpp.obj	e34582a88cf128fe
+4	521	6901768423346618	CMakeFiles/Graphs.dir/myGraph.cpp.obj	e1be5b0755f9f0c7
+5	11442	6901769666587475	CMakeFiles/Graphs.dir/testCases.cpp.obj	76ef8e214642a76f
+6	13080	6901772180640085	CMakeFiles/Graphs.dir/testCases.cpp.obj	76ef8e214642a76f
+7	11501	6901773987731331	CMakeFiles/Graphs.dir/testCases.cpp.obj	76ef8e214642a76f
+8	13013	6901801801692984	CMakeFiles/Graphs.dir/testCases.cpp.obj	76ef8e214642a76f
+3	13018	6901801801763061	CMakeFiles/Graphs.dir/main.cpp.obj	e34582a88cf128fe

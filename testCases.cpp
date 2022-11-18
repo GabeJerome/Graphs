@@ -376,3 +376,44 @@ TEST_CASE( "shortest path" )
     }
 
 }
+
+
+TEST_CASE( "primsMST" )
+{
+    SECTION( "two vertices" )
+    {
+        vector<string> cmp = { "0", "0 1" };
+        vector<string> tmp;
+        vector<vector<int>> t =
+        {
+            { 0, 1 },
+            { 1, 0 }
+        };
+
+        myGraph g( t );
+
+        tmp = g.primsMST( 0 );
+
+        REQUIRE( tmp == cmp );
+    }
+    SECTION( "five vertices weighted" )
+    {
+        vector<string> cmp = { "0", "0 1", "0 1 2", "0 1 3", "0 1 3 4" };
+        vector<string> tmp;
+        vector<vector<int>> t =
+        {
+            { 0, 1, 0, 0, 0 },
+            { 1, 0, 3, 2, 8 },
+            { 0, 3, 0, 0, 0 },
+            { 0, 2, 0, 0, 4 },
+            { 0, 8, 0, 4, 0 },
+        };
+
+        myGraph g( t );
+
+        tmp = g.primsMST( 0 );
+
+        REQUIRE( tmp == cmp );
+    }
+
+}

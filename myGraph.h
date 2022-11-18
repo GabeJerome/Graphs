@@ -7,6 +7,7 @@
 #include <vector>
 #include <queue>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -26,10 +27,12 @@ public:
     myGraph();
     myGraph(string graphName);
     myGraph( vector<vector<int>> g );       //This is here for testing purposes only
+    myGraph( int size );
     ~myGraph();
     vector<int> findCycle();
     vector<int> topologicalSort( );
     vector<string> shortestPath( int start );
+    vector<string> primsMST( int start );
     friend ostream& operator<<( ostream& out, myGraph &g );
 
 private:

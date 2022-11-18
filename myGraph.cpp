@@ -50,6 +50,20 @@ myGraph::myGraph( vector<vector<int>> g )
     adjMatrix = g;
 }
 
+myGraph::myGraph( int size )
+{
+    int i, j;
+    vector<int> tmp;
+
+    for ( i = 0; i < size; i++ )
+    {
+        for ( j = 0; j < size; j++ )
+            tmp.push_back( 0 );
+        adjMatrix.push_back( tmp );
+        tmp.clear( );
+    }
+}
+
 
 
 myGraph::~myGraph ( )
@@ -132,19 +146,23 @@ vector<int> myGraph::topologicalSort( )
     vector<vector<int>> tmpMatrix;
     vector<int> result;
     int i, j, size = adjMatrix.size( );
-
+    
+    //determine if it is acyclic
     if (!findCycle( ).empty( ) )
         return vector<int>( );
 
+    //created a temp matrix to preserve original
     tmpMatrix = adjMatrix;
     
-
+    //loop until matrix is all -1
     while ( !isEmpty(tmpMatrix) )
     {
+        //locate the index of the source
         i = findSource( tmpMatrix );
         if ( i == -1 )
             return vector<int>( );
 
+        //push back source and delete the row and column
         result.push_back( i );
         for ( j = 0; j < size; j++ )
         {
@@ -152,9 +170,6 @@ vector<int> myGraph::topologicalSort( )
                 tmpMatrix[i][j] = 0;
             tmpMatrix[j][i] = -1;
         }
-
-
-        
     }
 
     return result;
@@ -169,26 +184,36 @@ vector<string> myGraph::shortestPath( int start )
     queue<int> Q;
     int i, j, curr, size = adjMatrix.size( );
 
+    //initialize all structures
     for ( i = 0; i < size; i++ )
     {
         result.push_back( "" + start );
         visited.push_back( false );
         distance.push_back( INT_MAX );
     }
+
+    //set start
     distance[start] = 0;
     result[start] = to_string(start);
 
+    //push start to queue
     Q.push( start );
 
+    //while the queue is not empty
     while ( !Q.empty( ) )
     {
+        //pop and top queue
         curr = Q.front( );
         Q.pop( );
+
+        //iterate through row for out-edges
         for ( i = 0; i < size; i++ )
         {
+            //if an edge exists, push it to the queue
             if ( tmpMatrix[curr][i] > 0 && !visited[i] )
                 Q.push( i );
 
+            //if the new distance is smaller than the current distance, replace
             if ( tmpMatrix[curr][i] > 0 && distance[curr] + 1 < distance[i] )
             {
                 distance[i] = distance[curr] + 1;
@@ -196,13 +221,53 @@ vector<string> myGraph::shortestPath( int start )
             }
         }
 
+        //set visited to true for current vertex
+        visited[curr] = true;
+    }
+
+    return result;
+}
+
+vector<string> myGraph::primsMST( int start )
+{
+    vector<int> cost;
+    vector<bool> visited;
+    vector<string> paths;
+    int i, j, curr, size = adjMatrix.size();
+
+    for ( i = 0; i < size; i++ )
+    {
+        cost.push_back( INT_MAX );
+        visited.push_back( false );
+        paths.push_back( "" );
+    }
+    cost[start] = 0;
+    paths[start] = to_string(start );
+
+
+    while ( find( visited.begin( ), visited.end( ), false ) != visited.end( ) )
+    {
+        curr = 0;
+        while ( visited[curr] || cost[curr] == INT_MAX )
+        {
+            if ( ++curr >= size )
+                return paths;
+        }
+        for ( i = 0; i < size; i++ )
+        {
+            if ( adjMatrix[curr][i] != 0 && cost[curr] + adjMatrix[curr][i] < cost[i] )
+            {
+                cost[i] = cost[curr] + adjMatrix[curr][i];
+                paths[i] = paths[curr] + " " + to_string(i);
+            }
+        }
         visited[curr] = true;
     }
 
     /*for ( i = 0; i < size; i++ )
-        result[i].erase( 0, 1 );*/
+        paths[i] = paths[i] + " cost: " + to_string(cost[i]);*/
 
-    return result;
+    return paths;
 }
 
 
@@ -213,20 +278,26 @@ int findSource( vector<vector<int>> &g )
     int i, j, size = g.size();
     bool found = false;
     
+    //column loop
     for ( i = 0; i < size; i++ )
     {
+        //row loop
         for ( j = 0; !found && j < size; j++ )
         {
+            //set found if not zero
             if ( g[j][i] != 0 )
                 found = true;
         }
         
+        //return column if it has all zeroes
         if ( !found )
             return i;
 
+        //reset found to false
         found = false;
     }
 
+    //return -1 if no source
     return -1;
 }
 
@@ -234,14 +305,18 @@ bool isEmpty( vector<vector<int>> &g )
 {
     int i, j, size = g.size( );
 
+    //row loop
     for ( i = 0; i < size; i++ )
     {
+        //column loop
         for ( j = 0; j < size; j++ )
         {
+            //check for all -1's
             if ( g[i][j] != -1 )
                 return false;
         }
     }
+
     return true;
 }
 
@@ -252,10 +327,13 @@ ostream &operator<< ( ostream &out, myGraph &g )
     int size = g.adjMatrix.size();
     int i, j;
 
+    //row loop
     for(i = 0; i < size; i++)
     {
+        //column loop
         for(j = 0; j < size; j++)
         {
+            //output with formatting
             out << g.adjMatrix[i][j];
             if(j == size - 1)
                 out << '\n';
@@ -264,5 +342,6 @@ ostream &operator<< ( ostream &out, myGraph &g )
         }
     }
 
+    //return ostream
     return out;
 }

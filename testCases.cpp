@@ -415,5 +415,26 @@ TEST_CASE( "primsMST" )
 
         REQUIRE( tmp == cmp );
     }
+    SECTION( "in class example" )
+    {
+        vector<string> cmp = { "3 0", "3 0 1", "3 2", "3 6 4", "3 6 5", "3 6" };
+        vector<string> tmp;
+        vector<vector<int>> t =
+        {
+            { 0, 2, 4, 1, 0, 0, 0 },
+            { 2, 0, 0, 3, 10, 0, 0 },
+            { 4, 0, 0, 2, 0, 5, 0 },
+            { 1, 3, 2, 0, 7, 8, 4 },
+            { 0, 10, 0, 7, 0, 0, 6 },
+            { 0, 0, 5, 8, 0, 0, 1 },
+            { 0, 0, 0, 4, 6, 1, 0 },
+        };
+
+        myGraph g( t );
+
+        tmp = g.primsMST( 0 );
+
+        REQUIRE( tmp == cmp );
+    }
 
 }

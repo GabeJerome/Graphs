@@ -247,12 +247,16 @@ vector<string> myGraph::primsMST( int start )
 
     while ( find( visited.begin( ), visited.end( ), false ) != visited.end( ) )
     {
-        curr = 0;
+        curr = findSmallestUnvisited( visited, cost );
+        if ( curr == -1 )
+            return paths;
+
+        /*curr = 0;
         while ( visited[curr] || cost[curr] == INT_MAX )
         {
             if ( ++curr >= size )
                 return paths;
-        }
+        }*/
         for ( i = 0; i < size; i++ )
         {
             if ( adjMatrix[curr][i] != 0 && cost[curr] + adjMatrix[curr][i] < cost[i] )
@@ -318,6 +322,28 @@ bool isEmpty( vector<vector<int>> &g )
     }
 
     return true;
+}
+
+
+
+int findSmallestUnvisited( vector<bool> visited, vector<int> cost )
+{
+    int i, size = visited.size( ), min = 0;
+    bool found = false;
+
+    for ( i = 0; i < size; i++ )
+    {
+        if ( !visited[i] && cost[i] < cost[min] )
+        {
+            min = i;
+            found = true;
+        }
+    }
+
+    if ( found )
+        return min;
+    else
+        return -1;
 }
 
 

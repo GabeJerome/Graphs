@@ -20,6 +20,8 @@ int findSource( vector<vector<int>> &g );
 
 bool isEmpty( vector<vector<int>> &g );
 
+int findSmallestUnvisited( vector<bool> visited, vector<int> cost );
+
 
 class myGraph
 {

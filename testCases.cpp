@@ -382,8 +382,8 @@ TEST_CASE( "primsMST" )
 {
     SECTION( "two vertices" )
     {
-        vector<string> cmp = { "0", "0 1" };
-        vector<string> tmp;
+        vector<vector<int>> cmp = { };
+        vector<vector<int>> tmp;
         vector<vector<int>> t =
         {
             { 0, 1 },
@@ -398,8 +398,8 @@ TEST_CASE( "primsMST" )
     }
     SECTION( "five vertices weighted" )
     {
-        vector<string> cmp = { "0", "0 1", "0 1 2", "0 1 3", "0 1 3 4" };
-        vector<string> tmp;
+        vector<vector<int>> cmp = { };
+        vector<vector<int>> tmp;
         vector<vector<int>> t =
         {
             { 0, 1, 0, 0, 0 },
@@ -417,8 +417,8 @@ TEST_CASE( "primsMST" )
     }
     SECTION( "in class example" )
     {
-        vector<string> cmp = { "0", "0 1", "0 3 2", "0 3", "0 3 6 4", "0 3 6 5", "0 3 6" };
-        vector<string> tmp;
+        vector<vector<int>> cmp = { };
+        vector<vector<int>> tmp;
         vector<vector<int>> t =
         {
             { 0, 2, 4, 1, 0, 0, 0 },

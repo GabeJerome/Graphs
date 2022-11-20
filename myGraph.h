@@ -9,11 +9,21 @@
 #include <string>
 #include <algorithm>
 #include <set>
+#include <utility>
+
 
 using namespace std;
 
 #ifndef GRAPHS_MYGRAPH_H
 #define GRAPHS_MYGRAPH_H
+
+struct edge
+{
+    int from = 0;
+    int to = 0;
+    int cost = 0;
+    bool operator<( const edge &rhs ) const { return !(cost <= rhs.cost); }
+};
 
 
 
@@ -35,7 +45,7 @@ public:
     vector<int> findCycle();
     vector<int> topologicalSort( );
     vector<string> shortestPath( int start );
-    vector<string> primsMST( int start );
+    vector<vector<int>> primsMST( int start );
     friend ostream& operator<<( ostream& out, myGraph &g );
 
 private:

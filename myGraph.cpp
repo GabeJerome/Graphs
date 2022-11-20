@@ -230,44 +230,68 @@ vector<string> myGraph::shortestPath( int start )
 
 
 
-vector<string> myGraph::primsMST( int start )
+vector<vector<int>> myGraph::primsMST( int start )
 {
-    
-    vector<bool> visited;
-    vector<pair<string, int>> paths;
     int i, j, size = adjMatrix.size();
-    priority_queue<pair<int, int>> PQ;
-    set<int> S;
-    pair<int, int> tmp;
-    vector<int> cost( 0, size );
 
-    PQ.push( pair<int, int>( 0, start ) );
-    S.insert( start );
+    //use struct edge for second?
+    priority_queue<edge> PQ;
+    //set<int> S;
+    edge tmp, next;
+    vector<int> cost( size );
+    vector<bool> visited( size );
+    vector<string> paths( size );
+    vector<vector<int>> result(size, vector<int>(size) );
+
+    /*tmp.from = start;
+    tmp.to = start;
+    tmp.cost = 0;*/
+
+    //PQ.push( tmp );
+    //S.insert( start );
 
     for ( i = 0; i < size; i++ )
     {
         if ( adjMatrix[start][i] )
-            PQ.push( pair<int, int>( adjMatrix[start][i], i ) );
+        {
+            tmp.from = start;
+            tmp.to = i;
+            tmp.cost = adjMatrix[start][i];
+            PQ.push( tmp );
+        }
     }
+
+    visited[start] = true;
 
     while ( !PQ.empty( ) )
     {
-        
         tmp = PQ.top( );
         PQ.pop( );
 
-        if ( S.find( tmp.second ) != S.end( ) )
+        if ( !visited[tmp.to] )
         {
-            S.insert( tmp.second );
-            cost[tmp.second] = tmp.first;
-            paths[tmp.second].first = tmp.first;
+            //S.insert(tmp.second.to);
+            //cost[tmp.second] = tmp.first;
 
-            //figure out to keep track of path
+            //add tmp to graph
+            result[tmp.from][tmp.to] = tmp.cost;
+            result[tmp.to][tmp.from] = tmp.cost;
+
+            //push all out edges from tmp
             for ( i = 0; i < size; i++ )
             {
-                if ( adjMatrix[tmp.second][i] )
-                    PQ.push( pair<int, int>( adjMatrix[tmp.second][i], i ) );
+                if ( adjMatrix[tmp.to][i] && !visited[i] )
+                {
+                    next.from = tmp.to;
+                    next.to = i;
+                    next.cost = adjMatrix[tmp.to][i];
+                    PQ.push( next );
+                }
             }
+
+            //result[tmp.second.from][tmp.second.to] = tmp.first;
+
+            visited[tmp.to] = true;
         }
     }
     
@@ -308,7 +332,7 @@ vector<string> myGraph::primsMST( int start )
     ///*for ( i = 0; i < size; i++ )
     //    paths[i] = paths[i] + " cost: " + to_string(cost[i]);*/
 
-    return paths;
+    return result;
 }
 
 

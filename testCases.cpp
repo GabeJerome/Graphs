@@ -417,7 +417,7 @@ TEST_CASE( "primsMST" )
     }
     SECTION( "in class example" )
     {
-        vector<string> cmp = { "3 0", "3 0 1", "3 2", "3 6 4", "3 6 5", "3 6" };
+        vector<string> cmp = { "0", "0 1", "0 3 2", "0 3", "0 3 6 4", "0 3 6 5", "0 3 6" };
         vector<string> tmp;
         vector<vector<int>> t =
         {

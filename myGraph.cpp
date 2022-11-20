@@ -228,14 +228,51 @@ vector<string> myGraph::shortestPath( int start )
     return result;
 }
 
+
+
 vector<string> myGraph::primsMST( int start )
 {
-    vector<int> cost;
+    
     vector<bool> visited;
-    vector<string> paths;
-    int i, j, curr, size = adjMatrix.size();
+    vector<pair<string, int>> paths;
+    int i, j, size = adjMatrix.size();
+    priority_queue<pair<int, int>> PQ;
+    set<int> S;
+    pair<int, int> tmp;
+    vector<int> cost( 0, size );
+
+    PQ.push( pair<int, int>( 0, start ) );
+    S.insert( start );
 
     for ( i = 0; i < size; i++ )
+    {
+        if ( adjMatrix[start][i] )
+            PQ.push( pair<int, int>( adjMatrix[start][i], i ) );
+    }
+
+    while ( !PQ.empty( ) )
+    {
+        
+        tmp = PQ.top( );
+        PQ.pop( );
+
+        if ( S.find( tmp.second ) != S.end( ) )
+        {
+            S.insert( tmp.second );
+            cost[tmp.second] = tmp.first;
+            paths[tmp.second].first = tmp.first;
+
+            //figure out to keep track of path
+            for ( i = 0; i < size; i++ )
+            {
+                if ( adjMatrix[tmp.second][i] )
+                    PQ.push( pair<int, int>( adjMatrix[tmp.second][i], i ) );
+            }
+        }
+    }
+    
+
+    /*for ( i = 0; i < size; i++ )
     {
         cost.push_back( INT_MAX );
         visited.push_back( false );
@@ -243,33 +280,33 @@ vector<string> myGraph::primsMST( int start )
     }
     cost[start] = 0;
     paths[start] = to_string(start );
+*/
 
+    //while ( find( visited.begin( ), visited.end( ), false ) != visited.end( ) )
+    //{/*
+    //    curr = findSmallestUnvisited( visited, cost );
+    //    if ( curr == -1 )
+    //        return paths;*/
 
-    while ( find( visited.begin( ), visited.end( ), false ) != visited.end( ) )
-    {
-        curr = findSmallestUnvisited( visited, cost );
-        if ( curr == -1 )
-            return paths;
+    //    curr = 0;
+    //    while ( visited[curr] || cost[curr] == INT_MAX )
+    //    {
+    //        if ( ++curr >= size )
+    //            return paths;
+    //    }
+    //    for ( i = 0; i < size; i++ )
+    //    {
+    //        if ( adjMatrix[curr][i] != 0 && cost[curr] + adjMatrix[curr][i] < cost[i] )
+    //        {
+    //            cost[i] = cost[curr] + adjMatrix[curr][i];
+    //            paths[i] = paths[curr] + " " + to_string(i);
+    //        }
+    //    }
+    //    visited[curr] = true;
+    //}
 
-        /*curr = 0;
-        while ( visited[curr] || cost[curr] == INT_MAX )
-        {
-            if ( ++curr >= size )
-                return paths;
-        }*/
-        for ( i = 0; i < size; i++ )
-        {
-            if ( adjMatrix[curr][i] != 0 && cost[curr] + adjMatrix[curr][i] < cost[i] )
-            {
-                cost[i] = cost[curr] + adjMatrix[curr][i];
-                paths[i] = paths[curr] + " " + to_string(i);
-            }
-        }
-        visited[curr] = true;
-    }
-
-    /*for ( i = 0; i < size; i++ )
-        paths[i] = paths[i] + " cost: " + to_string(cost[i]);*/
+    ///*for ( i = 0; i < size; i++ )
+    //    paths[i] = paths[i] + " cost: " + to_string(cost[i]);*/
 
     return paths;
 }
@@ -331,9 +368,12 @@ int findSmallestUnvisited( vector<bool> visited, vector<int> cost )
     int i, size = visited.size( ), min = 0;
     bool found = false;
 
+    while ( cost[min] == INT_MAX || visited[min] )
+        min++;
+
     for ( i = 0; i < size; i++ )
     {
-        if ( !visited[i] && cost[i] < cost[min] )
+        if ( !visited[i] && cost[i] <= cost[min] )
         {
             min = i;
             found = true;

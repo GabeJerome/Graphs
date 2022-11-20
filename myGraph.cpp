@@ -243,6 +243,9 @@ vector<vector<int>> myGraph::primsMST( int start )
     vector<string> paths( size );
     vector<vector<int>> result(size, vector<int>(size) );
 
+    if ( start >= size || start < 0 )
+        return result;
+
     /*tmp.from = start;
     tmp.to = start;
     tmp.cost = 0;*/

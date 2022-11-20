@@ -382,7 +382,11 @@ TEST_CASE( "primsMST" )
 {
     SECTION( "two vertices" )
     {
-        vector<vector<int>> cmp = { };
+        vector<vector<int>> cmp = 
+        { 
+            { 0, 1 },
+            { 1, 0 }
+        };
         vector<vector<int>> tmp;
         vector<vector<int>> t =
         {
@@ -398,7 +402,14 @@ TEST_CASE( "primsMST" )
     }
     SECTION( "five vertices weighted" )
     {
-        vector<vector<int>> cmp = { };
+        vector<vector<int>> cmp = 
+        { 
+            { 0, 1, 0, 0, 0 },
+            { 1, 0, 3, 2, 0 },
+            { 0, 3, 0, 0, 0 },
+            { 0, 2, 0, 0, 4 },
+            { 0, 0, 0, 4, 0 },
+        };
         vector<vector<int>> tmp;
         vector<vector<int>> t =
         {
@@ -406,7 +417,7 @@ TEST_CASE( "primsMST" )
             { 1, 0, 3, 2, 8 },
             { 0, 3, 0, 0, 0 },
             { 0, 2, 0, 0, 4 },
-            { 0, 8, 0, 4, 0 },
+            { 0, 8, 0, 4, 0 }
         };
 
         myGraph g( t );
@@ -417,7 +428,16 @@ TEST_CASE( "primsMST" )
     }
     SECTION( "in class example" )
     {
-        vector<vector<int>> cmp = { };
+        vector<vector<int>> cmp = 
+        { 
+            { 0, 2, 0, 1, 0, 0, 0 },
+            { 2, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 2, 0, 0, 0 },
+            { 1, 0, 2, 0, 0, 0, 4 },
+            { 0, 0, 0, 0, 0, 0, 6 },
+            { 0, 0, 0, 0, 0, 0, 1 },
+            { 0, 0, 0, 4, 6, 1, 0 }
+        };
         vector<vector<int>> tmp;
         vector<vector<int>> t =
         {
@@ -427,7 +447,7 @@ TEST_CASE( "primsMST" )
             { 1, 3, 2, 0, 7, 8, 4 },
             { 0, 10, 0, 7, 0, 0, 6 },
             { 0, 0, 5, 8, 0, 0, 1 },
-            { 0, 0, 0, 4, 6, 1, 0 },
+            { 0, 0, 0, 4, 6, 1, 0 }
         };
 
         myGraph g( t );
@@ -436,5 +456,38 @@ TEST_CASE( "primsMST" )
 
         REQUIRE( tmp == cmp );
     }
+    SECTION( "tesselation" )
+    {
+        vector<vector<int>> cmp =
+        {
+            { 0, 8, 12, 0, 0, 0, 0, 0, 0 },
+            { 8, 0, 0, 0, 9, 0, 0, 0, 0 },
+            { 12, 0, 0, 14, 0, 0, 0, 0, 0 },
+            { 0, 0, 14, 0, 0, 8, 0, 0, 0 },
+            { 0, 9, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 8, 0, 0, 0, 11, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, 0, 11 },
+            { 0, 0, 0, 0, 0, 11, 0, 0, 9 },
+            { 0, 0, 0, 0, 0, 0, 11, 9, 0 }
+        };
+        vector<vector<int>> tmp;
+        vector<vector<int>> t =
+        {
+            { 0, 8, 12, 0, 0, 0, 0, 0, 0 },
+            { 8, 0, 13, 25, 9, 0, 0, 0, 0 },
+            { 12, 13, 0, 14, 0, 0, 21, 0, 0 },
+            { 0, 25, 14, 0, 20, 8, 12, 12, 16 },
+            { 0, 9, 0, 20, 0, 19, 0, 0, 0 },
+            { 0, 0, 0, 8, 19, 0, 0, 11, 0 },
+            { 0, 0, 21, 12, 0, 0, 0, 0, 11 },
+            { 0, 0, 0, 12, 0, 11, 0, 0, 9 },
+            { 0, 0, 0, 16, 0, 0, 11, 9, 0 }
+        };
 
+        myGraph g( t );
+
+        tmp = g.primsMST( 0 );
+
+        REQUIRE( tmp == cmp );
+    }
 }

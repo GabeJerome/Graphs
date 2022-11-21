@@ -70,6 +70,11 @@ myGraph::~myGraph ( )
 {
 }
 
+void myGraph::addEdge( int from, int to, int weight )
+{
+    adjMatrix[from][to] = weight;
+}
+
 
 
 vector<int> myGraph::findCycle ( )

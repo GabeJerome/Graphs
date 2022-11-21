@@ -42,10 +42,11 @@ public:
     myGraph( vector<vector<int>> g );       //This is here for testing purposes only
     myGraph( int size );
     ~myGraph();
+    void addEdge( int from, int to, int weight = 1 );
     vector<int> findCycle();
-    vector<int> topologicalSort( );
+    vector<int> topologicalSort( );             //TODO: this needs to return a graph + change test cases
     vector<string> shortestPath( int start );
-    vector<vector<int>> primsMST( int start );
+    vector<vector<int>> primsMST( int start );  //TODO: return a graph instead of a matrix + change test cases
     friend ostream& operator<<( ostream& out, myGraph &g );
 
 private:

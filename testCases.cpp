@@ -177,13 +177,16 @@ TEST_CASE( "topologicalSort" )
 {
     SECTION( "1 node cycle" )
     {
-        vector<int> cmp = { };
-        vector<int> tmp;
         vector<vector<int>> t =
         {
             { 1 }
         };
-        myGraph g( t );
+        vector<vector<int>> c = 
+        {
+            { 0 }
+        };
+        
+        myGraph g( t ), cmp(c), tmp;
 
         tmp = g.topologicalSort( );
 
@@ -191,13 +194,16 @@ TEST_CASE( "topologicalSort" )
     }
     SECTION( "1 node, no cycle" )
     {
-        vector<int> cmp = { 0 };
-        vector<int> tmp;
         vector<vector<int>> t =
         {
             { 0 }
         };
-        myGraph g( t );
+        vector<vector<int>> c =
+        {
+            { 0 }
+        };
+
+        myGraph g( t ), cmp( c ), tmp;
 
         tmp = g.topologicalSort( );
 
@@ -205,14 +211,18 @@ TEST_CASE( "topologicalSort" )
     }
     SECTION( "2 nodes, no cycle" )
     {
-        vector<int> cmp = { 0, 1 };
-        vector<int> tmp;
         vector<vector<int>> t =
         {
             { 0, 1 },
             { 0, 0 }
         };
-        myGraph g( t );
+        vector<vector<int>> c =
+        {
+            { 0, 1 },
+            { 0, 0 }
+        };
+
+        myGraph g( t ), cmp( c ), tmp;
 
         tmp = g.topologicalSort( );
 
@@ -220,18 +230,24 @@ TEST_CASE( "topologicalSort" )
     }
     SECTION( "small solution" )
     {
-        vector<int> cmp = { 4, 2, 0, 1, 3 };
-        vector<int> tmp;
         vector<vector<int>> t =
         {
-            {0,1,0,0,0 },
-            {0,0,0,1,0 },
-            {1,1,0,1,0 },
-            {0,0,0,0,0 },
-            {0,0,1,1,0 }
+            {0, 1, 0, 0, 0 },
+            {0, 0, 0, 1, 0 },
+            {1, 1, 0, 1, 0 },
+            {0, 0, 0, 0, 0 },
+            {0, 0, 1, 1, 0 }
+        };
+        vector<vector<int>> c =
+        {
+            {0, 1, 0, 0, 0 },
+            {0, 0, 0, 1, 0 },
+            {1, 0, 0, 0, 0 },
+            {0, 0, 0, 0, 0 },
+            {0, 0, 1, 0, 0 }
         };
 
-        myGraph g( t );
+        myGraph g( t ), cmp( c ), tmp;
 
         tmp = g.topologicalSort( );
 
@@ -239,8 +255,7 @@ TEST_CASE( "topologicalSort" )
     }
     SECTION( "larger solution" )
     {
-        vector<int> cmp = { 1, 3, 4, 0, 2, 5, 6, 9, 10, 8, 7 };
-        vector<int> tmp;
+        //vector<int> cmp = { 1, 3, 4, 0, 2, 5, 6, 9, 10, 8, 7 };
         vector<vector<int>> t =
         {
             { 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0},
@@ -253,10 +268,24 @@ TEST_CASE( "topologicalSort" )
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0},
+            { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0}
+        };
+        vector<vector<int>> c =
+        {
+            { 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+            { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+            { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+            { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0},
+            { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            { 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
+            { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0},
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         };
 
-        myGraph g( t );
+        myGraph g( t ), cmp( c ), tmp;
 
         tmp = g.topologicalSort( );
 
@@ -264,13 +293,12 @@ TEST_CASE( "topologicalSort" )
     }
     SECTION( "larger solution, two sources" )
     {
-        vector<int> cmp = { 1, 3, 4, 0, 2, 10, 5, 6, 8, 7, 9 };
-        vector<int> tmp;
+        //vector<int> cmp = { 1, 3, 4, 0, 2, 10, 5, 6, 8, 7, 9 };
         vector<vector<int>> t =
         {
-            { 0, 0, 8, 0, 0, 1, 0, 0, 0, 0, 0},
+            { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
             { 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0},
-            { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+            { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
             { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0},
             { 1, 0, 0, 0, 0, 6, 1, 0, 0, 0, 0},
             { 0, 0, 0, 0, 0, 0, 8, 0, 1, 0, 0},
@@ -278,10 +306,24 @@ TEST_CASE( "topologicalSort" )
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             { 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0},
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            { 0, 0, 0, 0, 0, 5, 0, 0, 1, 0, 0},
+            { 0, 0, 7, 0, 0, 5, 0, 0, 0, 0, 0},
+        };
+        vector<vector<int>> c =
+        {
+            { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+            { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0},
+            { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            { 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0},
+            { 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 0},
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            { 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0},
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            { 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0},
         };
 
-        myGraph g( t );
+        myGraph g( t ), cmp( c ), tmp;
 
         tmp = g.topologicalSort( );
 
@@ -289,24 +331,39 @@ TEST_CASE( "topologicalSort" )
     }
     SECTION( "large cyclic" )
     {
-        vector<int> cmp = { };
-        vector<int> tmp;
         vector<vector<int>> t =
         {
-        {0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0},
-        {1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0},
-        {1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0},
-        {0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0},
-        {0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0},
-        {0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0},
-        {0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
-        {0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1},
-        {0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1},
-        {0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0}
+            {0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0},
+            {1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0},
+            {1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0},
+            {0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0},
+            {0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+            {0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0},
+            {0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+            {0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1},
+            {0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1},
+            {0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0}
         };
-        myGraph g( t );
+        vector<vector<int>> c =
+        {
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            
+        };
+
+        myGraph g( t ), cmp( c ), tmp;
 
         tmp = g.topologicalSort( );
 
@@ -382,19 +439,18 @@ TEST_CASE( "primsMST" )
 {
     SECTION( "two vertices" )
     {
-        vector<vector<int>> cmp = 
+        vector<vector<int>> c = 
         { 
             { 0, 1 },
             { 1, 0 }
         };
-        vector<vector<int>> tmp;
         vector<vector<int>> t =
         {
             { 0, 1 },
             { 1, 0 }
         };
 
-        myGraph g( t );
+        myGraph g( t ), cmp(c), tmp;
 
         tmp = g.primsMST( 0 );
 
@@ -402,7 +458,7 @@ TEST_CASE( "primsMST" )
     }
     SECTION( "five vertices weighted" )
     {
-        vector<vector<int>> cmp = 
+        vector<vector<int>> c = 
         { 
             { 0, 1, 0, 0, 0 },
             { 1, 0, 3, 2, 0 },
@@ -410,7 +466,6 @@ TEST_CASE( "primsMST" )
             { 0, 2, 0, 0, 4 },
             { 0, 0, 0, 4, 0 },
         };
-        vector<vector<int>> tmp;
         vector<vector<int>> t =
         {
             { 0, 1, 0, 0, 0 },
@@ -420,7 +475,7 @@ TEST_CASE( "primsMST" )
             { 0, 8, 0, 4, 0 }
         };
 
-        myGraph g( t );
+        myGraph g( t ), cmp( c ), tmp;
 
         tmp = g.primsMST( 0 );
 
@@ -428,7 +483,7 @@ TEST_CASE( "primsMST" )
     }
     SECTION( "in class example" )
     {
-        vector<vector<int>> cmp = 
+        vector<vector<int>> c = 
         { 
             { 0, 2, 0, 1, 0, 0, 0 },
             { 2, 0, 0, 0, 0, 0, 0 },
@@ -438,7 +493,6 @@ TEST_CASE( "primsMST" )
             { 0, 0, 0, 0, 0, 0, 1 },
             { 0, 0, 0, 4, 6, 1, 0 }
         };
-        vector<vector<int>> tmp;
         vector<vector<int>> t =
         {
             { 0, 2, 4, 1, 0, 0, 0 },
@@ -450,7 +504,7 @@ TEST_CASE( "primsMST" )
             { 0, 0, 0, 4, 6, 1, 0 }
         };
 
-        myGraph g( t );
+        myGraph g( t ), cmp(c), tmp;
 
         tmp = g.primsMST( 0 );
 
@@ -458,7 +512,7 @@ TEST_CASE( "primsMST" )
     }
     SECTION( "tesselation" )
     {
-        vector<vector<int>> cmp =
+        vector<vector<int>> c =
         {
             { 0, 8, 12, 0, 0, 0, 0, 0, 0 },
             { 8, 0, 0, 0, 9, 0, 0, 0, 0 },
@@ -470,7 +524,6 @@ TEST_CASE( "primsMST" )
             { 0, 0, 0, 0, 0, 11, 0, 0, 9 },
             { 0, 0, 0, 0, 0, 0, 11, 9, 0 }
         };
-        vector<vector<int>> tmp;
         vector<vector<int>> t =
         {
             { 0, 8, 12, 0, 0, 0, 0, 0, 0 },
@@ -484,7 +537,7 @@ TEST_CASE( "primsMST" )
             { 0, 0, 0, 16, 0, 0, 11, 9, 0 }
         };
 
-        myGraph g( t );
+        myGraph g( t ), cmp(c), tmp;
 
         tmp = g.primsMST( 0 );
 

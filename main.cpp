@@ -21,7 +21,7 @@ int main ( int argc, char **argv)
         }
     }
 
-
+    //check command line arguments
     if(argc != 2)
     {
         cout << "Incorrect command line arguments." << endl;

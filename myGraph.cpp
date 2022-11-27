@@ -5,7 +5,7 @@
 #include "myGraph.h"
 
 
-
+//default constructor
 myGraph::myGraph ( )
 = default;
 
@@ -55,6 +55,7 @@ myGraph::myGraph( int size )
     int i, j;
     vector<int> tmp;
 
+    //create empty graph with given size
     for ( i = 0; i < size; i++ )
     {
         for ( j = 0; j < size; j++ )
@@ -72,6 +73,7 @@ myGraph::~myGraph ( )
 
 void myGraph::addEdge( int from, int to, int weight )
 {
+    //set point to given cost
     adjMatrix[from][to] = weight;
 }
 
@@ -146,34 +148,54 @@ vector<int> myGraph::findCycle ( )
     return result;
 }
 
-vector<int> myGraph::topologicalSort( )
+myGraph myGraph::topologicalSort( )
 {
     vector<vector<int>> tmpMatrix;
-    vector<int> result;
+    vector<int> tmpSource;
     int i, j, size = adjMatrix.size( );
+    myGraph result(size);
+    queue<edge> Q;
+    edge curr, tmpEdge;
+    bool found;
     
     //determine if it is acyclic
     if (!findCycle( ).empty( ) )
-        return vector<int>( );
+        return result;
 
-    //created a temp matrix to preserve original
+    //create a temp matrix to preserve original
     tmpMatrix = adjMatrix;
-    
-    //loop until matrix is all -1
-    while ( !isEmpty(tmpMatrix) )
-    {
-        //locate the index of the source
-        i = findSource( tmpMatrix );
-        if ( i == -1 )
-            return vector<int>( );
 
-        //push back source and delete the row and column
-        result.push_back( i );
-        for ( j = 0; j < size; j++ )
+    pushSources( tmpMatrix, Q );
+    
+
+    //loop until queue is empty
+    while ( !Q.empty() )
+    {
+        //top and pop queue
+        curr = Q.front( );
+        Q.pop( );
+
+        //add the current edge to the result
+        result.addEdge( curr.from, curr.to, curr.cost );
+
+        //search current vertex for outgoing edges
+        for ( i = 0; i < size; i++ )
         {
-            if(tmpMatrix[i][j] != -1 )
-                tmpMatrix[i][j] = 0;
-            tmpMatrix[j][i] = -1;
+            //if there is an outgoing edge
+            if ( tmpMatrix[curr.to][i] != 0 )
+            {
+                //set cost of edge and delete edge
+                tmpEdge.cost = tmpMatrix[curr.to][i];
+                tmpMatrix[curr.to][i] = 0;
+
+                //if the destination vertex is a new source, add to queue
+                if ( isSource( tmpMatrix, i ) )
+                {
+                    tmpEdge.from = curr.to;
+                    tmpEdge.to = i;
+                    Q.push( tmpEdge );
+                }
+            }
         }
     }
 
@@ -235,31 +257,28 @@ vector<string> myGraph::shortestPath( int start )
 
 
 
-vector<vector<int>> myGraph::primsMST( int start )
+/* This is Prim's algorithm to find the minimum spanning tree
+of a graph. I used a priority queue to keep track of my edges
+because it takes care of find the smallest edge for me. This
+way, I do not have to perform my own search throug the edges. */
+myGraph myGraph::primsMST( int start )
 {
     int i, j, size = adjMatrix.size();
-
-    //use struct edge for second?
     priority_queue<edge> PQ;
-    //set<int> S;
     edge tmp, next;
     vector<int> cost( size );
     vector<bool> visited( size );
     vector<string> paths( size );
-    vector<vector<int>> result(size, vector<int>(size) );
+    myGraph result( size );
 
+    //check for valid starting point
     if ( start >= size || start < 0 )
         return result;
 
-    /*tmp.from = start;
-    tmp.to = start;
-    tmp.cost = 0;*/
-
-    //PQ.push( tmp );
-    //S.insert( start );
-
+    //check starting vertex for outgoing edges
     for ( i = 0; i < size; i++ )
     {
+        //if this is an outgoing edge push it to the queue
         if ( adjMatrix[start][i] )
         {
             tmp.from = start;
@@ -269,8 +288,10 @@ vector<vector<int>> myGraph::primsMST( int start )
         }
     }
 
+    //set visited to true
     visited[start] = true;
 
+    //loop until the priority queue is empty
     while ( !PQ.empty( ) )
     {
         tmp = PQ.top( );
@@ -278,12 +299,9 @@ vector<vector<int>> myGraph::primsMST( int start )
 
         if ( !visited[tmp.to] )
         {
-            //S.insert(tmp.second.to);
-            //cost[tmp.second] = tmp.first;
-
             //add tmp to graph
-            result[tmp.from][tmp.to] = tmp.cost;
-            result[tmp.to][tmp.from] = tmp.cost;
+            result.addEdge( tmp.from, tmp.to, tmp.cost );
+            result.addEdge( tmp.to, tmp.from, tmp.cost );
 
             //push all out edges from tmp
             for ( i = 0; i < size; i++ )
@@ -297,48 +315,10 @@ vector<vector<int>> myGraph::primsMST( int start )
                 }
             }
 
-            //result[tmp.second.from][tmp.second.to] = tmp.first;
-
+            //set visited to true for current vertex
             visited[tmp.to] = true;
         }
     }
-    
-
-    /*for ( i = 0; i < size; i++ )
-    {
-        cost.push_back( INT_MAX );
-        visited.push_back( false );
-        paths.push_back( "" );
-    }
-    cost[start] = 0;
-    paths[start] = to_string(start );
-*/
-
-    //while ( find( visited.begin( ), visited.end( ), false ) != visited.end( ) )
-    //{/*
-    //    curr = findSmallestUnvisited( visited, cost );
-    //    if ( curr == -1 )
-    //        return paths;*/
-
-    //    curr = 0;
-    //    while ( visited[curr] || cost[curr] == INT_MAX )
-    //    {
-    //        if ( ++curr >= size )
-    //            return paths;
-    //    }
-    //    for ( i = 0; i < size; i++ )
-    //    {
-    //        if ( adjMatrix[curr][i] != 0 && cost[curr] + adjMatrix[curr][i] < cost[i] )
-    //        {
-    //            cost[i] = cost[curr] + adjMatrix[curr][i];
-    //            paths[i] = paths[curr] + " " + to_string(i);
-    //        }
-    //    }
-    //    visited[curr] = true;
-    //}
-
-    ///*for ( i = 0; i < size; i++ )
-    //    paths[i] = paths[i] + " cost: " + to_string(cost[i]);*/
 
     return result;
 }
@@ -346,32 +326,22 @@ vector<vector<int>> myGraph::primsMST( int start )
 
 
 
-int findSource( vector<vector<int>> &g )
+void pushSources( vector<vector<int>> &g, queue<edge> &Q )
 {
     int i, j, size = g.size();
-    bool found = false;
-    
-    //column loop
+    edge tmp;
+
+    //call isSource for each vertex and push if it is
     for ( i = 0; i < size; i++ )
     {
-        //row loop
-        for ( j = 0; !found && j < size; j++ )
+        if(isSource(g, i ) )
         {
-            //set found if not zero
-            if ( g[j][i] != 0 )
-                found = true;
+            tmp.from = i;
+            tmp.to = i;
+            tmp.cost = 0;
+            Q.push( tmp );
         }
-        
-        //return column if it has all zeroes
-        if ( !found )
-            return i;
-
-        //reset found to false
-        found = false;
     }
-
-    //return -1 if no source
-    return -1;
 }
 
 bool isEmpty( vector<vector<int>> &g )
@@ -395,27 +365,19 @@ bool isEmpty( vector<vector<int>> &g )
 
 
 
-int findSmallestUnvisited( vector<bool> visited, vector<int> cost )
+bool isSource( vector<vector<int>> &g, int vertex )
 {
-    int i, size = visited.size( ), min = 0;
-    bool found = false;
+    int i, size = g.size();
 
-    while ( cost[min] == INT_MAX || visited[min] )
-        min++;
-
+    //search the column for a non-zero value
     for ( i = 0; i < size; i++ )
     {
-        if ( !visited[i] && cost[i] <= cost[min] )
-        {
-            min = i;
-            found = true;
-        }
+        //return false if not zero
+        if ( g[i][vertex] )
+            return false;
     }
 
-    if ( found )
-        return min;
-    else
-        return -1;
+    return true;
 }
 
 
@@ -442,4 +404,11 @@ ostream &operator<< ( ostream &out, myGraph &g )
 
     //return ostream
     return out;
+}
+
+
+bool operator==( const myGraph &l, const myGraph &r )
+{
+    //use vector compare
+    return l.adjMatrix == r.adjMatrix;
 }

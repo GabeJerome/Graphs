@@ -27,11 +27,13 @@ struct edge
 
 
 
-int findSource( vector<vector<int>> &g );
+void pushSources( vector<vector<int>> &g, queue<edge> &Q );
 
 bool isEmpty( vector<vector<int>> &g );
 
 int findSmallestUnvisited( vector<bool> visited, vector<int> cost );
+
+bool isSource( vector<vector<int>> &g, int vertex );
 
 
 class myGraph
@@ -44,10 +46,11 @@ public:
     ~myGraph();
     void addEdge( int from, int to, int weight = 1 );
     vector<int> findCycle();
-    vector<int> topologicalSort( );             //TODO: this needs to return a graph + change test cases
+    myGraph topologicalSort( );
     vector<string> shortestPath( int start );
-    vector<vector<int>> primsMST( int start );  //TODO: return a graph instead of a matrix + change test cases
+    myGraph primsMST( int start );
     friend ostream& operator<<( ostream& out, myGraph &g );
+    friend bool operator==( const myGraph &l, const myGraph &r );
 
 private:
     vector<vector<int>> adjMatrix;

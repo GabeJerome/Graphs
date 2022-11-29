@@ -379,6 +379,12 @@ void readDot( ifstream &fin, myGraph &g )
     string temp;
     vector<string> lines;
 
+void readDot( ifstream &fin, myGraph &g )
+{
+    bool directed;
+    string temp;
+    vector<string> lines;
+
     //read whole file in
     while ( getline( fin, temp ) )
     {

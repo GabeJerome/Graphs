@@ -31,16 +31,16 @@ void pushSources( vector<vector<int>> &g, queue<edge> &Q );
 
 bool isEmpty( vector<vector<int>> &g );
 
-int findSmallestUnvisited( vector<bool> visited, vector<int> cost );
-
 bool isSource( vector<vector<int>> &g, int vertex );
+
+
 
 
 class myGraph
 {
 public:
     myGraph();
-    myGraph(string graphName);
+    myGraph(string filName);
     myGraph( vector<vector<int>> g );       //This is here for testing purposes only
     myGraph( int size );
     ~myGraph();
@@ -51,6 +51,8 @@ public:
     myGraph primsMST( int start );
     friend ostream& operator<<( ostream& out, myGraph &g );
     friend bool operator==( const myGraph &l, const myGraph &r );
+    friend void readDot( ifstream &fin, myGraph &g );
+    friend void readAdjMatrix( ifstream &fin, myGraph &g );
 
 private:
     vector<vector<int>> adjMatrix;

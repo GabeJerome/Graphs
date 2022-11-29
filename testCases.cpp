@@ -544,3 +544,15 @@ TEST_CASE( "primsMST" )
         REQUIRE( tmp == cmp );
     }
 }
+
+
+
+TEST_CASE( "readDot" )
+{
+    //use command: dot -Tpng name.gv -o name.png
+
+    SECTION( "simple graphViz file" )
+    {
+        myGraph g( "g1.gv" );
+    }
+}

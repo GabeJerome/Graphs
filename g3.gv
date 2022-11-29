@@ -1,0 +1,6 @@
+digraph G {
+	node[style=filled, shape=star, color=yellow]
+	edge[style=bold, color=brown]
+	1 [color=purple]
+	{0,1,2,3} -> {3,2,1,4}
+}

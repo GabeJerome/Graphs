@@ -13,34 +13,24 @@ myGraph::myGraph ( )
 //creates graph from file.
 //file format is an adjacency matrix with weights and -1 to mark the
 //  end of a row.
-myGraph::myGraph ( string graphName )
+myGraph::myGraph ( string fileName )
 {
     ifstream fin;
-    int x;
-    vector<int> tmp;
+    string tmp;
 
     /********** Change this between VS and CLion **********/
-    fin.open("../../../" + graphName );
+    fin.open("../../../" + fileName );
     if(!fin.is_open())
     {
-        cout << "Cannot open file: " << graphName << endl;
+        cout << "Cannot open file: " << fileName << endl;
         return;
     }
 
-    //read a single value in
-    while(fin >> x)
-    {
-        //if -1 it is the end of the row
-        if ( x == -1 )
-        {
-            //push row and clear
-            adjMatrix.push_back( tmp );
-            tmp.clear( );
-        }
-        //push to temp
-        else
-            tmp.push_back( x );
-    }
+    //read file extension and call appropriate function
+    if ( fileName.substr( fileName.find( '.' ), string::npos ) == ".gv" )
+        readDot( fin, *this );
+    else
+        readAdjMatrix( fin, *this );
 }
 
 
@@ -382,6 +372,51 @@ bool isSource( vector<vector<int>> &g, int vertex )
 
 
 
+void readDot( ifstream &fin, myGraph &g )
+{
+    bool directed;
+    string temp;
+    vector<string> lines;
+
+    //read whole file in
+    while ( getline( fin, temp ) )
+    {
+        //ignore comments
+        auto t = temp.find( "//" );
+        if(t != string::npos )
+            temp.erase( t, string::npos );
+
+        //ignore empty lines
+        if ( !temp.empty( ) )
+            lines.push_back( temp );
+    }
+}
+
+
+
+void readAdjMatrix( ifstream &fin, myGraph &g )
+{
+    int x;
+    vector<int> tmp;
+
+    //read a single value in
+    while ( fin >> x )
+    {
+        //if -1 it is the end of the row
+        if ( x == -1 )
+        {
+            //push row and clear
+            g.adjMatrix.push_back( tmp );
+            tmp.clear( );
+        }
+        //push to temp
+        else
+            tmp.push_back( x );
+    }
+}
+
+
+
 ostream &operator<< ( ostream &out, myGraph &g )
 {
     int size = g.adjMatrix.size();
@@ -405,6 +440,7 @@ ostream &operator<< ( ostream &out, myGraph &g )
     //return ostream
     return out;
 }
+
 
 
 bool operator==( const myGraph &l, const myGraph &r )

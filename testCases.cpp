@@ -550,9 +550,44 @@ TEST_CASE( "primsMST" )
 TEST_CASE( "readDot" )
 {
     //use command: dot -Tpng name.gv -o name.png
+    ostringstream sout;
 
     SECTION( "simple graphViz file" )
     {
-        myGraph g( "g2.gv" );       //TODO: write test cases for this!!!!
+        myGraph g( "g2.gv" );
+        sout << g;
+
+        REQUIRE( sout.str( ) == 
+            "0  1  0  0  0  0  0\n"
+            "0  0  0  0  0  0  0\n"
+            "0  0  0  0  0  0  0\n"
+            "0  0  0  0  0  0  0\n"
+            "0  0  0  0  0  0  0\n"
+            "0  0  0  0  0  0  0\n"
+            "0  1  0  13  0  0  0\n"
+             );
+    }
+    SECTION( "larger gv file" )
+    {
+        myGraph g( "g4.gv" );
+        sout << g;
+
+        REQUIRE( sout.str( ) == 
+            "0  1  1  1  1  1  1  1  1  1  1  1  1  1\n"
+            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
+            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
+            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
+            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
+            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
+            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
+            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
+            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
+            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
+            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
+            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
+            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
+            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
+            
+             );
     }
 }

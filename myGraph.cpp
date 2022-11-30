@@ -388,7 +388,7 @@ void readDot( ifstream &fin, myGraph &g )
             temp.erase( t, string::npos );
 
         //ignore empty lines
-        if ( !temp.empty( ) && temp.find_first_of( "{}" ) == string::npos )
+        if ( !temp.empty( ) && temp.find_first_of( "{}" ) == string::npos || temp.find( "raph" ) != string::npos )
         {
             //remove - and >
             temp.erase( remove( temp.begin( ), temp.end( ), '-' ), temp.end( ) );

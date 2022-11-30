@@ -29,6 +29,8 @@ int main ( int argc, char **argv)
         return 1;
     }
 
+    myGraph graph( argv[1] );
+    cout << graph.primsMST( 2 );
 
 
     return 0;

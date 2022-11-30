@@ -13,7 +13,7 @@ TEST_CASE("file constructor")
 {
     ostringstream sout;
 
-    SECTION("undirected graph")
+    SECTION("undirected unweighted graph")
     {
         myGraph g("g1.txt");
         sout << g;
@@ -23,6 +23,43 @@ TEST_CASE("file constructor")
                               "0  1  1  0  1  1\n"
                               "1  0  0  1  0  1\n"
                               "1  1  0  1  1  0\n");
+    }
+    SECTION("undirected weighted graph")
+    {
+        myGraph g("g2.txt");
+        sout << g;
+        REQUIRE(sout.str() == 
+            "0  1  0  0  1  6  1\n"
+            "1  0  1  7  0  0  3\n"
+            "0  1  0  1  0  0  0\n"
+            "0  7  1  0  4  0  1\n"
+            "1  0  0  4  0  2  5\n"
+            "6  0  0  0  2  0  0\n"
+            "1  3  0  1  5  0  0\n");
+    }
+    SECTION("directed unweighted graph")
+    {
+        myGraph g("g3.txt");
+        sout << g;
+        REQUIRE( sout.str( ) ==
+            "0  1  0  1  0  0\n"
+            "0  0  1  0  0  1\n"
+            "0  0  0  0  1  1\n"
+            "0  0  0  0  0  0\n"
+            "0  0  0  1  0  1\n"
+            "0  0  0  1  0  0\n" );
+    }
+    SECTION("directed unweighted graph")
+    {
+        myGraph g("g4.txt");
+        sout << g;
+        REQUIRE( sout.str( ) ==
+            "0  4  0  9  0  0\n"
+            "0  0  2  0  0  2\n"
+            "0  0  0  0  6  7\n"
+            "0  0  0  0  0  0\n"
+            "0  0  0  2  0  1\n"
+            "0  0  0  1  0  0\n" );
     }
     //TODO: add directed and weighted graphs
 }
@@ -550,44 +587,42 @@ TEST_CASE( "primsMST" )
 TEST_CASE( "readDot" )
 {
     //use command: dot -Tpng name.gv -o name.png
-    ostringstream sout;
+    ostringstream sout1, sout2;
 
-    SECTION( "simple graphViz file" )
+    SECTION( "undirected unweighted" )
     {
-        myGraph g( "g2.gv" );
-        sout << g;
+        myGraph g( "g1.gv" ), c("g1.txt" );
+        sout1 << g;
+        sout2 << c;
+        //cout << g << endl << endl << c;
 
-        REQUIRE( sout.str( ) == 
-            "0  1  0  0  0  0  0\n"
-            "0  0  0  0  0  0  0\n"
-            "0  0  0  0  0  0  0\n"
-            "0  0  0  0  0  0  0\n"
-            "0  0  0  0  0  0  0\n"
-            "0  0  0  0  0  0  0\n"
-            "0  1  0  13  0  0  0\n"
-             );
+        REQUIRE( sout1.str( ) == sout2.str());
     }
-    SECTION( "larger gv file" )
+    SECTION( "undirected weighted" )
     {
-        myGraph g( "g4.gv" );
-        sout << g;
+        myGraph g( "g2.gv" ), c( "g2.txt" );
+        sout1 << g;
+        sout2 << c;
+        //cout << g << endl << endl << c;
 
-        REQUIRE( sout.str( ) == 
-            "0  1  1  1  1  1  1  1  1  1  1  1  1  1\n"
-            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
-            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
-            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
-            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
-            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
-            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
-            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
-            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
-            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
-            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
-            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
-            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
-            "0  0  0  0  0  0  0  0  0  0  0  0  0  0\n"
-            
-             );
+        REQUIRE( sout1.str( ) == sout2.str( ) );
+    }
+    SECTION( "directed unweighted" )
+    {
+        myGraph g( "g3.gv" ), c( "g3.txt" );
+        sout1 << g;
+        sout2 << c;
+        //cout << g << endl << endl << c;
+
+        REQUIRE( sout1.str( ) == sout2.str( ) );
+    }
+    SECTION( "directed unweighted" )
+    {
+        myGraph g( "g4.gv" ), c( "g4.txt" );
+        sout1 << g;
+        sout2 << c;
+        //cout << g << endl << endl << c;
+
+        REQUIRE( sout1.str( ) == sout2.str( ) );
     }
 }

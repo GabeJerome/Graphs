@@ -553,6 +553,6 @@ TEST_CASE( "readDot" )
 
     SECTION( "simple graphViz file" )
     {
-        myGraph g( "g1.gv" );
+        myGraph g( "g2.gv" );       //TODO: write test cases for this!!!!
     }
 }

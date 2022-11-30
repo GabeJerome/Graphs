@@ -372,12 +372,12 @@ bool isSource( vector<vector<int>> &g, int vertex )
 
 
 
-
 void readDot( ifstream &fin, myGraph &g )
 {
-    bool directed;
+    bool directed = false;
     string temp;
     vector<string> lines;
+    int i, size = 0, space, first, second, weight;
 
     //read whole file in
     while ( getline( fin, temp ) )
@@ -388,9 +388,52 @@ void readDot( ifstream &fin, myGraph &g )
             temp.erase( t, string::npos );
 
         //ignore empty lines
-        if ( !temp.empty( ) )
+        if ( !temp.empty( ) && temp.find_first_of( "{}" ) == string::npos )
+        {
+            //remove - and >
+            temp.erase( remove( temp.begin( ), temp.end( ), '-' ), temp.end( ) );
+            temp.erase( remove( temp.begin( ), temp.end( ), '>' ), temp.end( ) );
+            temp.erase( remove( temp.begin( ), temp.end( ), '[' ), temp.end( ) );
+            temp.erase( remove( temp.begin( ), temp.end( ), ']' ), temp.end( ) );
             lines.push_back( temp );
+        }
     }
+
+    if ( lines[0].find("digraph") != string::npos )
+        directed = true;
+
+    for ( i = 1; i < lines.size(); i++ )
+    {
+        space = lines[i].find( " " );
+        first = stoi( lines[i].substr( 0, space ) );
+        second = stoi( lines[i].substr( space, string::npos ) );
+
+        if ( first > size )
+            size = first;
+        if ( second > size )
+            size = second;
+    }
+    size++;
+
+    myGraph tempGraph( size );
+
+    for ( i = 1; i < lines.size(); i++ )
+    {
+        if ( lines[i].find( "weight" ) != string::npos )
+            weight = stoi( lines[i].substr( lines[i].find( "=" ) + 1, string::npos ) );
+        else
+            weight = 1;
+
+        space = lines[i].find( " " );
+        first = stoi( lines[i].substr( 0, space ) );
+        second = stoi( lines[i].substr( space, string::npos ) );
+
+        tempGraph.addEdge( first, second, weight );
+        if ( !directed )
+            tempGraph.addEdge( second, first, weight );
+    }
+
+    g = tempGraph;
 }
 
 

@@ -642,5 +642,19 @@ TEST_CASE( "Dijkstra" )
         vector<string> cmp = { "2 1 0", "2 1", "2", "2 3" }, tmp;
 
         tmp = g.Dijkstra( 2 );
+
+        REQUIRE( tmp == cmp );
+    }
+    SECTION( "small graph" )
+    {
+        myGraph g( "g2.gv" );
+        vector<string> cmp = { "2 1 0", "2 1", "2", "2 3", "2 1 0 4", "2 1 0 4 5", "2 3 6" }, tmp;
+
+        tmp = g.Dijkstra( 2 );
+
+        REQUIRE( tmp == cmp );
     }
 }
+
+
+

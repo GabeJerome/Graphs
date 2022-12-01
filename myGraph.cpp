@@ -352,7 +352,7 @@ vector<string> myGraph::Dijkstra( int start )
                 Q.push( i );
 
             //if the new distance is smaller than the current distance, replace
-            if ( tmpMatrix[curr][i] > 0 && distance[curr] + 1 < distance[i] )
+            if ( tmpMatrix[curr][i] > 0 && distance[curr] + tmpMatrix[curr][i] < distance[i] )
             {
                 distance[i] = distance[curr] + tmpMatrix[curr][i];
                 result[i] = result[curr] + " " + to_string( i );

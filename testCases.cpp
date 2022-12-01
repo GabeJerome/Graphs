@@ -443,7 +443,7 @@ TEST_CASE( "shortest path" )
 
         REQUIRE( tmp == cmp );
     }
-    SECTION( "" )
+    SECTION( "large graph" )
     {
         vector<string> cmp = { "1 3 4 0", "1", "1 2", "1 3", "1 3 4", "1 2 5", "1 2 5 6", "1 2 5 6 7", "1 2 5 8", "1 2 5 6 9", "1 2 10" };
         vector<string> tmp;
@@ -468,7 +468,6 @@ TEST_CASE( "shortest path" )
 
         REQUIRE( tmp == cmp );
     }
-
 }
 
 
@@ -615,5 +614,33 @@ TEST_CASE( "readDot" )
         //cout << g << endl << endl << c;
 
         REQUIRE( sout1.str( ) == sout2.str() );
+    }
+    SECTION( "directed weighted" )
+    {
+        myGraph g( "g4.gv" ), c( "g4.txt" );
+        sout1 << g;
+        sout2 << c;
+        //cout << g << endl << endl << c;
+
+        REQUIRE( sout1.str( ) == sout2.str() );
+    }
+}
+
+
+TEST_CASE( "Dijkstra" )
+{
+    SECTION( "small graph" )
+    {
+        vector<vector<int>> t =
+        {
+            { 0, 2, 5, 0 },
+            { 2, 0, 2, 0 },
+            { 5, 2, 0, 6 },
+            { 0, 0, 6, 0 },
+        };
+        myGraph g( t );
+        vector<string> cmp = { "2 1 0", "2 1", "2", "2 3" }, tmp;
+
+        tmp = g.Dijkstra( 2 );
     }
 }

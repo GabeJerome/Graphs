@@ -313,6 +313,59 @@ myGraph myGraph::primsMST( int start )
     return result;
 }
 
+vector<string> myGraph::Dijkstra( int start )
+{
+    vector<vector<int>> tmpMatrix = adjMatrix;
+    vector<string> result;
+    vector<bool> visited;
+    vector<int> distance;
+    queue<int> Q;
+    int i, j, curr, size = adjMatrix.size( );
+
+    //initialize all structures
+    for ( i = 0; i < size; i++ )
+    {
+        result.push_back( "" + start );
+        visited.push_back( false );
+        distance.push_back( INT_MAX );
+    }
+
+    //set start
+    distance[start] = 0;
+    result[start] = to_string( start );
+
+    //push start to queue
+    Q.push( start );
+
+    //while the queue is not empty
+    while ( !Q.empty( ) )
+    {
+        //pop and top queue
+        curr = Q.front( );
+        Q.pop( );
+
+        //iterate through row for out-edges
+        for ( i = 0; i < size; i++ )
+        {
+            //if an edge exists, push it to the queue
+            if ( tmpMatrix[curr][i] > 0 && !visited[i] )
+                Q.push( i );
+
+            //if the new distance is smaller than the current distance, replace
+            if ( tmpMatrix[curr][i] > 0 && distance[curr] + 1 < distance[i] )
+            {
+                distance[i] = distance[curr] + tmpMatrix[curr][i];
+                result[i] = result[curr] + " " + to_string( i );
+            }
+        }
+
+        //set visited to true for current vertex
+        visited[curr] = true;
+    }
+
+    return result;
+}
+
 
 
 

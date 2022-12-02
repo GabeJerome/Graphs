@@ -657,4 +657,12 @@ TEST_CASE( "Dijkstra" )
 }
 
 
+TEST_CASE( "Ford Fulkerson" )
+{
+    SECTION( "first" )
+    {
+        myGraph g( "g4.gv" );
 
+        g.FordFulkerson( 0, 3 );
+    }
+}

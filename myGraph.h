@@ -50,6 +50,7 @@ public:
     vector<string> shortestPath( int start );
     myGraph primsMST( int start );
     vector<string> Dijkstra( int start );
+    int FordFulkerson( int s, int t );
     friend ostream& operator<<( ostream& out, myGraph &g );
     friend bool operator==( const myGraph &l, const myGraph &r );
     friend void readDot( ifstream &fin, myGraph &g );

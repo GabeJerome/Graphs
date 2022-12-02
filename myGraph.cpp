@@ -366,6 +366,19 @@ vector<string> myGraph::Dijkstra( int start )
     return result;
 }
 
+int myGraph::FordFulkerson( int s, int t )
+{
+    int size = adjMatrix.size( );
+    vector<bool> visited( size, false );
+    queue<int> Q;
+    Q.push( s );
+    visited[s] = true;
+    int flow = 0;
+    vector<vector<int>> residual( size, vector<int>( size, 0 ));
+
+    return 0;
+}
+
 
 
 

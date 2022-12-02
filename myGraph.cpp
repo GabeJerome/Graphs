@@ -379,6 +379,37 @@ int myGraph::FordFulkerson( int s, int t )
     return 0;
 }
 
+vector<int> myGraph::BFS( int s, int t )
+{
+    int size = adjMatrix.size( );
+    vector<bool> visited( size, false );
+    queue<int> Q;
+    vector<int> path;
+    int curr, i;
+
+    Q.push( s );
+    visited[s] = true;
+
+    while ( !Q.empty( ) )
+    {
+        curr = Q.front( );
+        Q.pop( );
+
+        for ( i = 0; i < size; i++ )
+        {
+            //if the node is unvisited and there is an edge
+            if ( !visited[i] && adjMatrix[curr][i] > 0 )
+            {
+                Q.push( i );
+                path.push_back( );
+                if( curr == t )
+            }
+        }
+    }
+
+    return vector<int>( );
+}
+
 
 
 

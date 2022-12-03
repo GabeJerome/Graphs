@@ -659,10 +659,104 @@ TEST_CASE( "Dijkstra" )
 
 TEST_CASE( "Ford Fulkerson" )
 {
-    SECTION( "first" )
+    SECTION( "in class flow example" )
+    {
+        vector<vector<int>> t =
+        {
+            { 0, 4, 2, 0, 0, 0 },
+            { 0, 0, 1, 2, 4, 0 },
+            { 0, 0, 0, 0, 2, 0 },
+            { 0, 0, 0, 0, 0, 2 },
+            { 0, 0, 0, 0, 0, 3 },
+            { 0, 0, 0, 0, 0, 0 }
+        };
+        myGraph g( t );
+        int tmp = g.FordFulkerson( 0, 5 );
+
+        REQUIRE( tmp == 5 );
+    }
+    SECTION( "another example" )
+    {
+        vector<vector<int>> t =
+        {
+            { 0, 1, 3, 0, 0, 0 },
+            { 0, 0, 0, 99, 99, 0 },
+            { 0, 0, 0, 0, 99, 0 },
+            { 0, 0, 0, 0, 0, 2 },
+            { 0, 0, 0, 0, 0, 2 },
+            { 0, 0, 0, 0, 0, 0 }
+        };
+        myGraph g( t );
+        int tmp = g.FordFulkerson( 0, 5 );
+
+        REQUIRE( tmp == 3 );
+    }
+    SECTION( "g4" ) //TODO: retest this
     {
         myGraph g( "g4.gv" );
+        int tmp = g.FordFulkerson( 0, 3 );
 
-        g.FordFulkerson( 0, 3 );
+        REQUIRE( tmp == 11 );
     }
+}
+
+
+
+TEST_CASE( "BFS" )
+{
+    SECTION( "g3" )
+    {
+        myGraph g( "g3.gv" );
+        vector<int> cmp = { 0, 1, 5 }, tmp;
+
+        tmp = g.BFS( 0, 5 );
+
+        REQUIRE( tmp == cmp );
+    }
+    SECTION( "g4" )
+    {
+        myGraph g( "g4.gv" );
+        vector<int> cmp = { 0, 1, 2, 4 }, tmp;
+
+        tmp = g.BFS( 0, 4 );
+
+        REQUIRE( tmp == cmp );
+    }
+    SECTION( "in class flow example" )
+    {
+        vector<vector<int>> t =
+        {
+            { 0, 4, 2, 0, 0, 0 },
+            { 0, 0, 2, 2, 4, 0 },
+            { 0, 0, 0, 0, 4, 0 },
+            { 0, 0, 0, 0, 0, 2 },
+            { 0, 0, 0, 0, 0, 3 },
+            { 0, 0, 0, 0, 0, 0 }
+        };
+        myGraph g( t );
+        vector<int> cmp = { 0, 1, 3, 5 }, tmp;
+
+        tmp = g.BFS( 0, 5 );
+
+        REQUIRE( tmp == cmp );
+    }
+    SECTION( "in class flow example 2" )
+    {
+        vector<vector<int>> t =
+        {
+            { 0, 4, 2, 0, 0, 0 },
+            { 0, 0, 1, 0, 4, 0 },
+            { 0, 0, 0, 0, 2, 0 },
+            { 0, 0, 0, 0, 0, 2 },
+            { 0, 0, 0, 0, 0, 3 },
+            { 0, 0, 0, 0, 0, 0 }
+        };
+        myGraph g( t );
+        vector<int> cmp = { 0, 1, 2, 4, 5 }, tmp;
+
+        tmp = g.BFS( 0, 5 );
+
+        REQUIRE( tmp == cmp );
+    }
+
 }

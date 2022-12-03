@@ -366,49 +366,103 @@ vector<string> myGraph::Dijkstra( int start )
     return result;
 }
 
+
+
 int myGraph::FordFulkerson( int s, int t )
 {
-    int size = adjMatrix.size( );
-    vector<bool> visited( size, false );
-    queue<int> Q;
-    Q.push( s );
-    visited[s] = true;
-    int flow = 0;
-    vector<vector<int>> residual( size, vector<int>( size, 0 ));
+    myGraph residual( adjMatrix );
+    vector<int> tmpPath = residual.BFS( s, t );
+    int flow = 0, currFlow, i, size, curr, next;
+    
+    if ( s < 0 || s >= adjMatrix.size() || t < 0 || t >= adjMatrix.size( ) )
+        return -1;
 
-    return 0;
+
+    while ( !tmpPath.empty( ) )
+    {
+        currFlow = INT_MAX;
+        size = tmpPath.size( );
+
+        for ( i = 0; i < size - 1; i++ )
+        {
+            curr = tmpPath[i];
+            next = tmpPath[i + 1];
+            //if edge weight is smallest so far
+            if ( residual.adjMatrix[curr][next] < currFlow )
+                currFlow = residual.adjMatrix[curr][next];
+        }
+
+        for ( i = 0; i < size - 1; i++ )
+        {
+            curr = tmpPath[i];
+            next = tmpPath[i + 1];
+            //if edge weight is smallest so far
+            residual.adjMatrix[curr][next] -= currFlow;
+        }
+
+        flow += currFlow;
+        tmpPath = residual.BFS( s, t );
+    }
+
+
+    return flow;
 }
+
+
 
 vector<int> myGraph::BFS( int s, int t )
 {
-    int size = adjMatrix.size( );
-    vector<bool> visited( size, false );
+    vector<vector<int>> tmpMatrix = adjMatrix;
+    vector<vector<int>> result;
+    vector<bool> visited;
+    vector<int> temp;
     queue<int> Q;
-    vector<int> path;
-    int curr, i;
+    int i, j, curr, size = adjMatrix.size( );
 
+    //initialize all structures
+    for ( i = 0; i < size; i++ )
+    {
+        result.push_back( vector<int>() );
+        visited.push_back( false );
+    }
+
+    //set start
+    result[s] = { s };
+
+    //push start to queue
     Q.push( s );
-    visited[s] = true;
 
+    //while the queue is not empty
     while ( !Q.empty( ) )
     {
+        //pop and top queue
         curr = Q.front( );
         Q.pop( );
 
+        //iterate through row for out-edges
         for ( i = 0; i < size; i++ )
         {
-            //if the node is unvisited and there is an edge
-            if ( !visited[i] && adjMatrix[curr][i] > 0 )
+            //if an edge exists, push it to the queue
+            if ( tmpMatrix[curr][i] > 0 && !visited[i] )
             {
                 Q.push( i );
-                path.push_back( );
-                if( curr == t )
+                temp = result[curr];
+                temp.push_back( i );
+                result[i] = temp;
+
+                if ( i == t )
+                    return result[i];
             }
         }
+
+        //set visited to true for current vertex
+        visited[curr] = true;
     }
 
-    return vector<int>( );
+    return vector<int>();
 }
+
+
 
 
 

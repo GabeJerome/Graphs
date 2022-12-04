@@ -55,7 +55,6 @@ public:
     vector<string> Dijkstra( int start );
     int FordFulkerson( int s, int t );
     vector<int> BFS( int s, int t );
-    
     myGraph kruskalsMST( );
     friend ostream& operator<<( ostream& out, myGraph &g );
     friend bool operator==( const myGraph &l, const myGraph &r );

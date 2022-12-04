@@ -511,7 +511,7 @@ myGraph myGraph::kruskalsMST( )
         g.addEdge( tmp.to, tmp.from, tmp.cost );
         edges++;
 
-        if ( g.DFS( tmp.to, tmp.to ) != vector<int>( ) )
+        if ( g.findCycle() == vector<int>( ) )
         {
             g.removeEdge( tmp.from, tmp.to );
             g.removeEdge( tmp.to, tmp.from );
@@ -522,13 +522,13 @@ myGraph myGraph::kruskalsMST( )
     }
 
 
-    /*for ( i = 0; i < size; i++ )
+    for ( i = 0; i < size; i++ )
     {
         for ( j = i; j < size; j++ )
         {
             g.addEdge( j, i, g.adjMatrix[i][j] );
         }
-    }*/
+    }
 
     return g;
 }

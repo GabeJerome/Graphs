@@ -502,7 +502,6 @@ myGraph myGraph::kruskalsMST( )
         }
     }
 
-
     while ( edges < size - 1 && !PQ.empty() )
     {
         tmp = PQ.top( );

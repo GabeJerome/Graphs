@@ -23,7 +23,8 @@ struct edge
     int from = 0;
     int to = 0;
     int cost = 0;
-    bool operator<( const edge &rhs ) const { return !(cost <= rhs.cost); }
+    bool operator<( const edge &rhs ) const { return cost < rhs.cost; }
+    bool operator>( const edge &rhs ) const { return cost > rhs.cost; }
 };
 
 
@@ -46,6 +47,7 @@ public:
     myGraph( int size );
     ~myGraph();
     void addEdge( int from, int to, int weight = 1 );
+    void removeEdge( int from, int to );
     vector<int> findCycle();
     myGraph topologicalSort( );
     vector<string> shortestPath( int start );
@@ -53,6 +55,8 @@ public:
     vector<string> Dijkstra( int start );
     int FordFulkerson( int s, int t );
     vector<int> BFS( int s, int t );
+    
+    myGraph kruskalsMST( );
     friend ostream& operator<<( ostream& out, myGraph &g );
     friend bool operator==( const myGraph &l, const myGraph &r );
     friend void readDot( ifstream &fin, myGraph &g );

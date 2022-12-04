@@ -666,7 +666,7 @@ TEST_CASE( "Ford Fulkerson" )
             { 0, 4, 2, 0, 0, 0 },
             { 0, 0, 1, 2, 4, 0 },
             { 0, 0, 0, 0, 2, 0 },
-            { 0, 0, 0, 0, 0, 2 },
+            { 0, 0, 0, 0, 0, 3 },
             { 0, 0, 0, 0, 0, 3 },
             { 0, 0, 0, 0, 0, 0 }
         };
@@ -691,12 +691,12 @@ TEST_CASE( "Ford Fulkerson" )
 
         REQUIRE( tmp == 3 );
     }
-    SECTION( "g4" ) //TODO: retest this
+    SECTION( "g4" )
     {
         myGraph g( "g4.gv" );
         int tmp = g.FordFulkerson( 0, 3 );
 
-        REQUIRE( tmp == 11 );
+        REQUIRE( tmp == 12 );
     }
 }
 
@@ -727,14 +727,14 @@ TEST_CASE( "BFS" )
         vector<vector<int>> t =
         {
             { 0, 4, 2, 0, 0, 0 },
-            { 0, 0, 2, 2, 4, 0 },
-            { 0, 0, 0, 0, 4, 0 },
-            { 0, 0, 0, 0, 0, 2 },
+            { 0, 0, 1, 2, 4, 0 },
+            { 0, 0, 0, 0, 2, 0 },
+            { 0, 0, 0, 0, 0, 3 },
             { 0, 0, 0, 0, 0, 3 },
             { 0, 0, 0, 0, 0, 0 }
         };
         myGraph g( t );
-        vector<int> cmp = { 0, 1, 3, 5 }, tmp;
+        vector<int> cmp = { 0, 1, 4, 5 }, tmp;
 
         tmp = g.BFS( 0, 5 );
 
@@ -745,7 +745,7 @@ TEST_CASE( "BFS" )
         vector<vector<int>> t =
         {
             { 0, 4, 2, 0, 0, 0 },
-            { 0, 0, 1, 0, 4, 0 },
+            { 0, 0, 5, 2, 4, 0 },
             { 0, 0, 0, 0, 2, 0 },
             { 0, 0, 0, 0, 0, 2 },
             { 0, 0, 0, 0, 0, 3 },
@@ -759,4 +759,118 @@ TEST_CASE( "BFS" )
         REQUIRE( tmp == cmp );
     }
 
+}
+
+
+
+TEST_CASE( "kruskal's" )
+{
+    SECTION( "two vertices" )
+    {
+        vector<vector<int>> c =
+        {
+            { 0, 1 },
+            { 1, 0 }
+        };
+        vector<vector<int>> t =
+        {
+            { 0, 1 },
+            { 1, 0 }
+        };
+
+        myGraph g( t ), cmp( c ), tmp;
+
+        tmp = g.kruskalsMST( );
+
+        REQUIRE( tmp == cmp );
+    }
+    SECTION( "five vertices weighted" )
+    {
+        vector<vector<int>> c =
+        {
+            { 0, 1, 0, 0, 0 },
+            { 1, 0, 3, 2, 0 },
+            { 0, 3, 0, 0, 0 },
+            { 0, 2, 0, 0, 4 },
+            { 0, 0, 0, 4, 0 },
+        };
+        vector<vector<int>> t =
+        {
+            { 0, 1, 0, 0, 0 },
+            { 1, 0, 3, 2, 8 },
+            { 0, 3, 0, 0, 0 },
+            { 0, 2, 0, 0, 4 },
+            { 0, 8, 0, 4, 0 }
+        };
+
+        myGraph g( t ), cmp( c ), tmp;
+
+        tmp = g.kruskalsMST( );
+
+        REQUIRE( tmp == cmp );
+    }
+    SECTION( "in class example" )
+    {
+        vector<vector<int>> c =
+        {
+            { 0, 2, 0, 1, 0, 0, 0 },
+            { 2, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 2, 0, 0, 0 },
+            { 1, 0, 2, 0, 0, 0, 4 },
+            { 0, 0, 0, 0, 0, 0, 6 },
+            { 0, 0, 0, 0, 0, 0, 1 },
+            { 0, 0, 0, 4, 6, 1, 0 }
+        };
+        vector<vector<int>> t =
+        {
+            { 0, 2, 4, 1, 0, 0, 0 },
+            { 2, 0, 0, 3, 10, 0, 0 },
+            { 4, 0, 0, 2, 0, 5, 0 },
+            { 1, 3, 2, 0, 7, 8, 4 },
+            { 0, 10, 0, 7, 0, 0, 6 },
+            { 0, 0, 5, 8, 0, 0, 1 },
+            { 0, 0, 0, 4, 6, 1, 0 }
+        };
+
+        myGraph g( t ), cmp( c ), tmp;
+
+        tmp = g.kruskalsMST( );
+
+        cout << tmp << endl << endl << cmp << endl;
+
+        REQUIRE( tmp == cmp );
+    }
+    SECTION( "tesselation" )
+    {
+        vector<vector<int>> c =
+        {
+            { 0, 8, 12, 0, 0, 0, 0, 0, 0 },
+            { 8, 0, 0, 0, 9, 0, 0, 0, 0 },
+            { 12, 0, 0, 14, 0, 0, 0, 0, 0 },
+            { 0, 0, 14, 0, 0, 8, 0, 0, 0 },
+            { 0, 9, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 8, 0, 0, 0, 11, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, 0, 11 },
+            { 0, 0, 0, 0, 0, 11, 0, 0, 9 },
+            { 0, 0, 0, 0, 0, 0, 11, 9, 0 }
+        };
+        vector<vector<int>> t =
+        {
+            { 0, 8, 12, 0, 0, 0, 0, 0, 0 },
+            { 8, 0, 13, 25, 9, 0, 0, 0, 0 },
+            { 12, 13, 0, 14, 0, 0, 21, 0, 0 },
+            { 0, 25, 14, 0, 20, 8, 12, 12, 16 },
+            { 0, 9, 0, 20, 0, 19, 0, 0, 0 },
+            { 0, 0, 0, 8, 19, 0, 0, 11, 0 },
+            { 0, 0, 21, 12, 0, 0, 0, 0, 11 },
+            { 0, 0, 0, 12, 0, 11, 0, 0, 9 },
+            { 0, 0, 0, 16, 0, 0, 11, 9, 0 }
+        };
+
+        myGraph g( t ), cmp( c ), tmp;
+
+        tmp = g.kruskalsMST( );
+
+        REQUIRE( tmp == cmp );
+    }
 }

@@ -41,14 +41,14 @@ bool isSource( vector<vector<int>> &g, int vertex );
 class myGraph
 {
 public:
-    myGraph();
-    myGraph(string filName);
+    myGraph( );
+    myGraph( string filName );
     myGraph( vector<vector<int>> g );       //This is here for testing purposes only
     myGraph( int size );
-    ~myGraph();
+    ~myGraph( );
     void addEdge( int from, int to, int weight = 1 );
     void removeEdge( int from, int to );
-    vector<int> findCycle();
+    vector<int> findCycle( );
     myGraph topologicalSort( );
     vector<string> shortestPath( int start );
     myGraph primsMST( int start );
@@ -56,7 +56,9 @@ public:
     int FordFulkerson( int s, int t );
     vector<int> BFS( int s, int t );
     myGraph kruskalsMST( );
-    friend ostream& operator<<( ostream& out, myGraph &g );
+    bool isCyclicUndirected( int v, vector<bool> visited, int last );
+
+    friend ostream &operator<<( ostream &out, myGraph &g );
     friend bool operator==( const myGraph &l, const myGraph &r );
     friend void readDot( ifstream &fin, myGraph &g );
     friend void readAdjMatrix( ifstream &fin, myGraph &g );

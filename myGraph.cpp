@@ -6,21 +6,21 @@
 
 
 //default constructor
-myGraph::myGraph ( )
+myGraph::myGraph( )
 = default;
 
 
 //creates graph from file.
 //file format is an adjacency matrix with weights and -1 to mark the
 //  end of a row.
-myGraph::myGraph ( string fileName )
+myGraph::myGraph( string fileName )
 {
     ifstream fin;
     string tmp;
 
     /********** Change this between VS and CLion **********/
-    fin.open("../../../" + fileName );
-    if(!fin.is_open())
+    fin.open( "../../../" + fileName );
+    if ( !fin.is_open( ) )
     {
         cout << "Cannot open file: " << fileName << endl;
         return;
@@ -57,7 +57,7 @@ myGraph::myGraph( int size )
 
 
 
-myGraph::~myGraph ( )
+myGraph::~myGraph( )
 {
 }
 
@@ -67,19 +67,25 @@ void myGraph::addEdge( int from, int to, int weight )
     adjMatrix[from][to] = weight;
 }
 
+void myGraph::removeEdge( int from, int to )
+{
+    //set edge to 0
+    addEdge( from, to, 0 );
+}
 
 
-vector<int> myGraph::findCycle ( )
+
+vector<int> myGraph::findCycle( )
 {
     vector<vector<int>> tmpMatrix = adjMatrix;
     vector<int> result;
     queue<int> Q;
     int *inDegree = nullptr;
-    int size = adjMatrix.size();
+    int size = adjMatrix.size( );
     int i, j, tmp;
 
     //allocate array
-    inDegree = new (nothrow) int[size];
+    inDegree = new ( nothrow ) int[size];
     if ( inDegree == nullptr )
     {
         cout << "error allocating memory in findCycle" << endl;
@@ -89,14 +95,14 @@ vector<int> myGraph::findCycle ( )
     //initialize to zero
     for ( i = 0; i < size; i++ )
         inDegree[i] = 0;
-    
+
 
     //compute in-degree of each vertex
-    for(i = 0; i < size; i++)
+    for ( i = 0; i < size; i++ )
     {
-        for(j = 0; j < size; j++)
+        for ( j = 0; j < size; j++ )
         {
-            if(tmpMatrix[i][j] != 0)
+            if ( tmpMatrix[i][j] != 0 )
                 inDegree[j]++;
         }
     }
@@ -128,7 +134,7 @@ vector<int> myGraph::findCycle ( )
     }
 
     //push all vertices that were not completely explored
-    //will be empty ifno cycle
+    //will be empty if no cycle
     for ( i = 0; i < size; i++ )
     {
         if ( inDegree[i] >= 0 )
@@ -143,23 +149,23 @@ myGraph myGraph::topologicalSort( )
     vector<vector<int>> tmpMatrix;
     vector<int> tmpSource;
     int i, j, size = adjMatrix.size( );
-    myGraph result(size);
+    myGraph result( size );
     queue<edge> Q;
     edge curr, tmpEdge;
     bool found;
-    
+
     //determine if it is acyclic
-    if (!findCycle( ).empty( ) )
+    if ( !findCycle( ).empty( ) )
         return result;
 
     //create a temp matrix to preserve original
     tmpMatrix = adjMatrix;
 
     pushSources( tmpMatrix, Q );
-    
+
 
     //loop until queue is empty
-    while ( !Q.empty() )
+    while ( !Q.empty( ) )
     {
         //top and pop queue
         curr = Q.front( );
@@ -211,7 +217,7 @@ vector<string> myGraph::shortestPath( int start )
 
     //set start
     distance[start] = 0;
-    result[start] = to_string(start);
+    result[start] = to_string( start );
 
     //push start to queue
     Q.push( start );
@@ -234,7 +240,7 @@ vector<string> myGraph::shortestPath( int start )
             if ( tmpMatrix[curr][i] > 0 && distance[curr] + 1 < distance[i] )
             {
                 distance[i] = distance[curr] + 1;
-                result[i] = result[curr] + " " + to_string(i);
+                result[i] = result[curr] + " " + to_string( i );
             }
         }
 
@@ -253,8 +259,8 @@ because it takes care of find the smallest edge for me. This
 way, I do not have to perform my own search throug the edges. */
 myGraph myGraph::primsMST( int start )
 {
-    int i, j, size = adjMatrix.size();
-    priority_queue<edge> PQ;
+    int i, j, size = adjMatrix.size( );
+    priority_queue <edge, vector<edge>, greater<edge> > PQ;
     edge tmp, next;
     vector<int> cost( size );
     vector<bool> visited( size );
@@ -373,8 +379,8 @@ int myGraph::FordFulkerson( int s, int t )
     myGraph residual( adjMatrix );
     vector<int> tmpPath = residual.BFS( s, t );
     int flow = 0, currFlow, i, size, curr, next;
-    
-    if ( s < 0 || s >= adjMatrix.size() || t < 0 || t >= adjMatrix.size( ) )
+
+    if ( s < 0 || s >= adjMatrix.size( ) || t < 0 || t >= adjMatrix.size( ) )
         return -1;
 
 
@@ -398,6 +404,7 @@ int myGraph::FordFulkerson( int s, int t )
             next = tmpPath[i + 1];
             //if edge weight is smallest so far
             residual.adjMatrix[curr][next] -= currFlow;
+            residual.adjMatrix[next][curr] += currFlow;
         }
 
         flow += currFlow;
@@ -416,13 +423,14 @@ vector<int> myGraph::BFS( int s, int t )
     vector<vector<int>> result;
     vector<bool> visited;
     vector<int> temp;
-    queue<int> Q;
-    int i, j, curr, size = adjMatrix.size( );
+    priority_queue<edge> PQ;
+    int i, j, size = adjMatrix.size( );
+    edge tmpEdge, curr;
 
     //initialize all structures
     for ( i = 0; i < size; i++ )
     {
-        result.push_back( vector<int>() );
+        result.push_back( vector<int>( ) );
         visited.push_back( false );
     }
 
@@ -430,23 +438,29 @@ vector<int> myGraph::BFS( int s, int t )
     result[s] = { s };
 
     //push start to queue
-    Q.push( s );
+    tmpEdge.from = s;
+    tmpEdge.to = s;
+    tmpEdge.cost = 0;
+    PQ.push( tmpEdge );
 
     //while the queue is not empty
-    while ( !Q.empty( ) )
+    while ( !PQ.empty( ) )
     {
         //pop and top queue
-        curr = Q.front( );
-        Q.pop( );
+        curr = PQ.top( );
+        PQ.pop( );
 
         //iterate through row for out-edges
         for ( i = 0; i < size; i++ )
         {
             //if an edge exists, push it to the queue
-            if ( tmpMatrix[curr][i] > 0 && !visited[i] )
+            if ( tmpMatrix[curr.to][i] > 0 && !visited[i] )
             {
-                Q.push( i );
-                temp = result[curr];
+                tmpEdge.from = curr.to;
+                tmpEdge.to = i;
+                tmpEdge.cost = tmpMatrix[tmpEdge.from][tmpEdge.to];
+                PQ.push( tmpEdge );
+                temp = result[curr.to];
                 temp.push_back( i );
                 result[i] = temp;
 
@@ -456,22 +470,47 @@ vector<int> myGraph::BFS( int s, int t )
         }
 
         //set visited to true for current vertex
-        visited[curr] = true;
+        visited[curr.to] = true;
     }
 
-    return vector<int>();
+    return vector<int>( );
 }
 
 
+
+bool myGraph::isCyclicUndirected( int curr, vector<bool> visited, int last )
+{
+    // Mark the current vertex as visited
+    visited[curr] = true;
+
+    // Recur for all neighbors of curr
+    int i, size = adjMatrix.size( );
+    for ( i = 0; i < size; i++ )
+    {
+        //Recur for unvisited neighbor of curr
+        if ( adjMatrix[curr][i] > 0 && !visited[i] )
+        {
+            if ( isCyclicUndirected( i, visited, curr ) )
+                return true;
+        }
+
+        //If the neighbor is visited and it is not the
+        //previous vertex, there is a cycle
+        else if ( adjMatrix[curr][i] > 0 && i != last )
+            return true;
+    }
+
+    return false;
+}
 
 
 
 myGraph myGraph::kruskalsMST( )
 {
-    int edges = 0, size = adjMatrix.size(), i, j;
+    int edges = 0, size = adjMatrix.size( ), i, j;
     priority_queue <edge, vector<edge>, greater<edge> > PQ;
     edge tmp;
-    myGraph g(size);
+    myGraph g( size );
     vector<bool> visited( size, false );
 
     for ( i = 0; i < size; i++ )
@@ -488,7 +527,7 @@ myGraph myGraph::kruskalsMST( )
         }
     }
 
-    while ( edges < size - 1 && !PQ.empty() )
+    while ( edges < size - 1 && !PQ.empty( ) )
     {
         tmp = PQ.top( );
         PQ.pop( );
@@ -496,37 +535,28 @@ myGraph myGraph::kruskalsMST( )
         g.addEdge( tmp.to, tmp.from, tmp.cost );
         edges++;
 
-        if ( g.findCycle() == vector<int>( ) )
+        if ( g.isCyclicUndirected( tmp.to, visited, -1 ) )
         {
             g.removeEdge( tmp.from, tmp.to );
             g.removeEdge( tmp.to, tmp.from );
             edges--;
         }
-
-        visited[tmp.to] = true;
     }
 
-
-    for ( i = 0; i < size; i++ )
-    {
-        for ( j = i; j < size; j++ )
-        {
-            g.addEdge( j, i, g.adjMatrix[i][j] );
-        }
-    }
-
+    return g;
+}
 
 
 
 void pushSources( vector<vector<int>> &g, queue<edge> &Q )
 {
-    int i, j, size = g.size();
+    int i, j, size = g.size( );
     edge tmp;
 
     //call isSource for each vertex and push if it is
     for ( i = 0; i < size; i++ )
     {
-        if(isSource(g, i ) )
+        if ( isSource( g, i ) )
         {
             tmp.from = i;
             tmp.to = i;
@@ -559,7 +589,7 @@ bool isEmpty( vector<vector<int>> &g )
 
 bool isSource( vector<vector<int>> &g, int vertex )
 {
-    int i, size = g.size();
+    int i, size = g.size( );
 
     //search the column for a non-zero value
     for ( i = 0; i < size; i++ )
@@ -586,7 +616,7 @@ void readDot( ifstream &fin, myGraph &g )
     {
         //ignore comments
         auto t = temp.find( "//" );
-        if(t != string::npos )
+        if ( t != string::npos )
             temp.erase( t, string::npos );
 
         //ignore empty lines
@@ -601,10 +631,10 @@ void readDot( ifstream &fin, myGraph &g )
         }
     }
 
-    if ( lines[0].find("digraph") != string::npos )
+    if ( lines[0].find( "digraph" ) != string::npos )
         directed = true;
 
-    for ( i = 1; i < lines.size(); i++ )
+    for ( i = 1; i < lines.size( ); i++ )
     {
         space = lines[i].find( " " );
         first = stoi( lines[i].substr( 0, space ) );
@@ -619,7 +649,7 @@ void readDot( ifstream &fin, myGraph &g )
 
     myGraph tempGraph( size );
 
-    for ( i = 1; i < lines.size(); i++ )
+    for ( i = 1; i < lines.size( ); i++ )
     {
         if ( lines[i].find( "weight" ) != string::npos )
             weight = stoi( lines[i].substr( lines[i].find( "=" ) + 1, string::npos ) );
@@ -665,18 +695,18 @@ void readAdjMatrix( ifstream &fin, myGraph &g )
 
 ostream &operator<< ( ostream &out, myGraph &g )
 {
-    int size = g.adjMatrix.size();
+    int size = g.adjMatrix.size( );
     int i, j;
 
     //row loop
-    for(i = 0; i < size; i++)
+    for ( i = 0; i < size; i++ )
     {
         //column loop
-        for(j = 0; j < size; j++)
+        for ( j = 0; j < size; j++ )
         {
             //output with formatting
             out << g.adjMatrix[i][j];
-            if(j == size - 1)
+            if ( j == size - 1 )
                 out << '\n';
             else
                 out << "  ";

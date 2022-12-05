@@ -9,37 +9,37 @@
 using namespace std;
 
 
-TEST_CASE("file constructor")
+TEST_CASE( "file constructor" )
 {
     ostringstream sout;
 
-    SECTION("undirected unweighted graph")
+    SECTION( "undirected unweighted graph" )
     {
-        myGraph g("g1.txt");
+        myGraph g( "g1.txt" );
         sout << g;
-        REQUIRE(sout.str() == "0  1  0  0  1  1\n"
-                              "1  0  1  1  0  1\n"
-                              "0  1  0  1  0  0\n"
-                              "0  1  1  0  1  1\n"
-                              "1  0  0  1  0  1\n"
-                              "1  1  0  1  1  0\n");
+        REQUIRE( sout.str( ) == "0  1  0  0  1  1\n"
+            "1  0  1  1  0  1\n"
+            "0  1  0  1  0  0\n"
+            "0  1  1  0  1  1\n"
+            "1  0  0  1  0  1\n"
+            "1  1  0  1  1  0\n" );
     }
-    SECTION("undirected weighted graph")
+    SECTION( "undirected weighted graph" )
     {
-        myGraph g("g2.txt");
+        myGraph g( "g2.txt" );
         sout << g;
-        REQUIRE(sout.str() == 
+        REQUIRE( sout.str( ) ==
             "0  1  0  0  1  6  1\n"
             "1  0  1  7  0  0  3\n"
             "0  1  0  1  0  0  0\n"
             "0  7  1  0  4  0  1\n"
             "1  0  0  4  0  2  5\n"
             "6  0  0  0  2  0  0\n"
-            "1  3  0  1  5  0  0\n");
+            "1  3  0  1  5  0  0\n" );
     }
-    SECTION("directed unweighted graph")
+    SECTION( "directed unweighted graph" )
     {
-        myGraph g("g3.txt");
+        myGraph g( "g3.txt" );
         sout << g;
         REQUIRE( sout.str( ) ==
             "0  1  0  1  0  0\n"
@@ -49,9 +49,9 @@ TEST_CASE("file constructor")
             "0  0  0  1  0  1\n"
             "0  0  0  1  0  0\n" );
     }
-    SECTION("directed unweighted graph")
+    SECTION( "directed unweighted graph" )
     {
-        myGraph g("g4.txt");
+        myGraph g( "g4.txt" );
         sout << g;
         REQUIRE( sout.str( ) ==
             "0  4  0  9  0  0\n"
@@ -161,7 +161,7 @@ TEST_CASE( "find Cycle" )
     }
     SECTION( "large cycle" )
     {
-        vector<int> cmp = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+        vector<int> cmp = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
         vector<int> tmp;
         vector<vector<int>> t =
         {
@@ -218,12 +218,12 @@ TEST_CASE( "topologicalSort" )
         {
             { 1 }
         };
-        vector<vector<int>> c = 
+        vector<vector<int>> c =
         {
             { 0 }
         };
-        
-        myGraph g( t ), cmp(c), tmp;
+
+        myGraph g( t ), cmp( c ), tmp;
 
         tmp = g.topologicalSort( );
 
@@ -397,7 +397,7 @@ TEST_CASE( "topologicalSort" )
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            
+
         };
 
         myGraph g( t ), cmp( c ), tmp;
@@ -475,8 +475,8 @@ TEST_CASE( "primsMST" )
 {
     SECTION( "two vertices" )
     {
-        vector<vector<int>> c = 
-        { 
+        vector<vector<int>> c =
+        {
             { 0, 1 },
             { 1, 0 }
         };
@@ -486,7 +486,7 @@ TEST_CASE( "primsMST" )
             { 1, 0 }
         };
 
-        myGraph g( t ), cmp(c), tmp;
+        myGraph g( t ), cmp( c ), tmp;
 
         tmp = g.primsMST( 0 );
 
@@ -494,8 +494,8 @@ TEST_CASE( "primsMST" )
     }
     SECTION( "five vertices weighted" )
     {
-        vector<vector<int>> c = 
-        { 
+        vector<vector<int>> c =
+        {
             { 0, 1, 0, 0, 0 },
             { 1, 0, 3, 2, 0 },
             { 0, 3, 0, 0, 0 },
@@ -519,8 +519,8 @@ TEST_CASE( "primsMST" )
     }
     SECTION( "in class example" )
     {
-        vector<vector<int>> c = 
-        { 
+        vector<vector<int>> c =
+        {
             { 0, 2, 0, 1, 0, 0, 0 },
             { 2, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 2, 0, 0, 0 },
@@ -540,7 +540,7 @@ TEST_CASE( "primsMST" )
             { 0, 0, 0, 4, 6, 1, 0 }
         };
 
-        myGraph g( t ), cmp(c), tmp;
+        myGraph g( t ), cmp( c ), tmp;
 
         tmp = g.primsMST( 0 );
 
@@ -573,7 +573,7 @@ TEST_CASE( "primsMST" )
             { 0, 0, 0, 16, 0, 0, 11, 9, 0 }
         };
 
-        myGraph g( t ), cmp(c), tmp;
+        myGraph g( t ), cmp( c ), tmp;
 
         tmp = g.primsMST( 0 );
 
@@ -590,12 +590,12 @@ TEST_CASE( "readDot" )
 
     SECTION( "undirected unweighted" )
     {
-        myGraph g( "g1.gv" ), c("g1.txt" );
+        myGraph g( "g1.gv" ), c( "g1.txt" );
         sout1 << g;
         sout2 << c;
         //cout << g << endl << endl << c;
 
-        REQUIRE( sout1.str( ) == sout2.str());
+        REQUIRE( sout1.str( ) == sout2.str( ) );
     }
     SECTION( "undirected weighted" )
     {
@@ -613,7 +613,7 @@ TEST_CASE( "readDot" )
         sout2 << c;
         //cout << g << endl << endl << c;
 
-        REQUIRE( sout1.str( ) == sout2.str() );
+        REQUIRE( sout1.str( ) == sout2.str( ) );
     }
     SECTION( "directed weighted" )
     {
@@ -622,7 +622,7 @@ TEST_CASE( "readDot" )
         sout2 << c;
         //cout << g << endl << endl << c;
 
-        REQUIRE( sout1.str( ) == sout2.str() );
+        REQUIRE( sout1.str( ) == sout2.str( ) );
     }
 }
 
@@ -807,6 +807,8 @@ TEST_CASE( "kruskal's" )
 
         tmp = g.kruskalsMST( );
 
+        cout << tmp << endl << endl << cmp << endl;
+
         REQUIRE( tmp == cmp );
     }
     SECTION( "in class example" )
@@ -835,8 +837,6 @@ TEST_CASE( "kruskal's" )
         myGraph g( t ), cmp( c ), tmp;
 
         tmp = g.kruskalsMST( );
-
-        cout << tmp << endl << endl << cmp << endl;
 
         REQUIRE( tmp == cmp );
     }

@@ -67,12 +67,6 @@ void myGraph::addEdge( int from, int to, int weight )
     adjMatrix[from][to] = weight;
 }
 
-void myGraph::removeEdge( int from, int to )
-{
-    //set edge to 0
-    addEdge( from, to, 0 );
-}
-
 
 
 vector<int> myGraph::findCycle ( )
@@ -134,7 +128,7 @@ vector<int> myGraph::findCycle ( )
     }
 
     //push all vertices that were not completely explored
-    //will be empty if no cycle
+    //will be empty ifno cycle
     for ( i = 0; i < size; i++ )
     {
         if ( inDegree[i] >= 0 )
@@ -260,7 +254,7 @@ way, I do not have to perform my own search throug the edges. */
 myGraph myGraph::primsMST( int start )
 {
     int i, j, size = adjMatrix.size();
-    priority_queue <edge, vector<edge>, greater<edge> > PQ;
+    priority_queue<edge> PQ;
     edge tmp, next;
     vector<int> cost( size );
     vector<bool> visited( size );
@@ -404,7 +398,6 @@ int myGraph::FordFulkerson( int s, int t )
             next = tmpPath[i + 1];
             //if edge weight is smallest so far
             residual.adjMatrix[curr][next] -= currFlow;
-            residual.adjMatrix[next][curr] += currFlow;
         }
 
         flow += currFlow;
@@ -423,9 +416,8 @@ vector<int> myGraph::BFS( int s, int t )
     vector<vector<int>> result;
     vector<bool> visited;
     vector<int> temp;
-    priority_queue<edge> PQ;
-    int i, j, size = adjMatrix.size( );
-    edge tmpEdge, curr;
+    queue<int> Q;
+    int i, j, curr, size = adjMatrix.size( );
 
     //initialize all structures
     for ( i = 0; i < size; i++ )
@@ -438,29 +430,23 @@ vector<int> myGraph::BFS( int s, int t )
     result[s] = { s };
 
     //push start to queue
-    tmpEdge.from = s;
-    tmpEdge.to = s;
-    tmpEdge.cost = 0;
-    PQ.push( tmpEdge );
+    Q.push( s );
 
     //while the queue is not empty
-    while ( !PQ.empty( ) )
+    while ( !Q.empty( ) )
     {
         //pop and top queue
-        curr = PQ.top( );
-        PQ.pop( );
+        curr = Q.front( );
+        Q.pop( );
 
         //iterate through row for out-edges
         for ( i = 0; i < size; i++ )
         {
             //if an edge exists, push it to the queue
-            if ( tmpMatrix[curr.to][i] > 0 && !visited[i] )
+            if ( tmpMatrix[curr][i] > 0 && !visited[i] )
             {
-                tmpEdge.from = curr.to;
-                tmpEdge.to = i;
-                tmpEdge.cost = tmpMatrix[tmpEdge.from][tmpEdge.to];
-                PQ.push( tmpEdge );
-                temp = result[curr.to];
+                Q.push( i );
+                temp = result[curr];
                 temp.push_back( i );
                 result[i] = temp;
 
@@ -470,68 +456,19 @@ vector<int> myGraph::BFS( int s, int t )
         }
 
         //set visited to true for current vertex
-        visited[curr.to] = true;
+        visited[curr] = true;
     }
 
     return vector<int>();
 }
 
-
-
-
-
 myGraph myGraph::kruskalsMST( )
 {
-    int edges = 0, size = adjMatrix.size(), i, j;
-    priority_queue <edge, vector<edge>, greater<edge> > PQ;
-    edge tmp;
-    myGraph g(size);
-    vector<bool> visited( size, false );
-
-    for ( i = 0; i < size; i++ )
-    {
-        for ( j = i; j < size; j++ )
-        {
-            if ( adjMatrix[i][j] > 0 )
-            {
-                tmp.from = i;
-                tmp.to = j;
-                tmp.cost = adjMatrix[i][j];
-                PQ.push( tmp );
-            }
-        }
-    }
-
-
-    while ( edges < size - 1 && !PQ.empty() )
-    {
-        tmp = PQ.top( );
-        PQ.pop( );
-        g.addEdge( tmp.from, tmp.to, tmp.cost );
-        g.addEdge( tmp.to, tmp.from, tmp.cost );
-        edges++;
-
-        if ( g.findCycle() == vector<int>( ) )
-        {
-            g.removeEdge( tmp.from, tmp.to );
-            g.removeEdge( tmp.to, tmp.from );
-            edges--;
-        }
-
-        visited[tmp.to] = true;
-    }
-
-
-    for ( i = 0; i < size; i++ )
-    {
-        for ( j = i; j < size; j++ )
-        {
-            g.addEdge( j, i, g.adjMatrix[i][j] );
-        }
-    }
-
-    return g;
+    return myGraph( );
 }
+
+
+
 
 
 

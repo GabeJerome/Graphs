@@ -478,6 +478,31 @@ vector<int> myGraph::BFS( int s, int t )
 
 
 
+bool myGraph::isCyclicUndirected( int curr, vector<bool> visited, int last )
+{
+    // Mark the current vertex as visited
+    visited[curr] = true;
+
+    // Recur for all neighbors of curr
+    int i, size = adjMatrix.size();
+    for ( i = 0; i < size; i++ )
+    {
+        //Recur for unvisited neighbor of curr
+        if ( adjMatrix[curr][i] > 0 && !visited[i] )
+        {
+            if ( isCyclicUndirected( i, visited, curr ) )
+                return true;
+        }
+
+        //If the neighbor is visited and it is not the
+        //previous vertex, there is a cycle
+        else if ( adjMatrix[curr][i] > 0 && i != last )
+            return true;
+    }
+
+    return false;
+}
+
 
 
 myGraph myGraph::kruskalsMST( )
@@ -510,22 +535,11 @@ myGraph myGraph::kruskalsMST( )
         g.addEdge( tmp.to, tmp.from, tmp.cost );
         edges++;
 
-        if ( g.findCycle() == vector<int>( ) )
+        if ( g.isCyclicUndirected( tmp.to, visited, -1 ) )
         {
             g.removeEdge( tmp.from, tmp.to );
             g.removeEdge( tmp.to, tmp.from );
             edges--;
-        }
-
-        visited[tmp.to] = true;
-    }
-
-
-    for ( i = 0; i < size; i++ )
-    {
-        for ( j = i; j < size; j++ )
-        {
-            g.addEdge( j, i, g.adjMatrix[i][j] );
         }
     }
 

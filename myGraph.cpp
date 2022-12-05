@@ -313,6 +313,8 @@ myGraph myGraph::primsMST( int start )
     return result;
 }
 
+
+
 vector<string> myGraph::Dijkstra( int start )
 {
     vector<vector<int>> tmpMatrix = adjMatrix;
@@ -462,12 +464,72 @@ vector<int> myGraph::BFS( int s, int t )
     return vector<int>();
 }
 
-myGraph myGraph::kruskalsMST( )
+
+
+bool myGraph::isCyclicUndirected( int curr, vector<bool> visited, int last )
 {
-    return myGraph( );
+    // Mark the current vertex as visited
+    visited[curr] = true;
+
+    // Recur for all neighbors of curr
+    int i, size = adjMatrix.size();
+    for ( i = 0; i < size; i++ )
+    {
+        //Recur for unvisited neighbor of curr
+        if ( adjMatrix[curr][i] > 0 && !visited[i] )
+        {
+            if ( isCyclicUndirected( i, visited, curr ) )
+                return true;
+        }
+
+        //If the neighbor is visited and it is not the
+        //previous vertex, there is a cycle
+        else if ( adjMatrix[curr][i] > 0 && i != last )
+            return true;
+    }
+
+    return false;
 }
 
 
+
+myGraph myGraph::kruskalsMST( )
+{
+    int edges = 0, size = adjMatrix.size(), i, j;
+    priority_queue <edge, vector<edge>, greater<edge> > PQ;
+    edge tmp;
+    myGraph g(size);
+    vector<bool> visited( size, false );
+
+    for ( i = 0; i < size; i++ )
+    {
+        for ( j = i; j < size; j++ )
+        {
+            if ( adjMatrix[i][j] > 0 )
+            {
+                tmp.from = i;
+                tmp.to = j;
+                tmp.cost = adjMatrix[i][j];
+                PQ.push( tmp );
+            }
+        }
+    }
+
+    while ( edges < size - 1 && !PQ.empty() )
+    {
+        tmp = PQ.top( );
+        PQ.pop( );
+        g.addEdge( tmp.from, tmp.to, tmp.cost );
+        g.addEdge( tmp.to, tmp.from, tmp.cost );
+        edges++;
+
+        if ( g.isCyclicUndirected( tmp.to, visited, -1 ) )
+        {
+            g.removeEdge( tmp.from, tmp.to );
+            g.removeEdge( tmp.to, tmp.from );
+            edges--;
+        }
+    }
 
 
 
@@ -524,6 +586,21 @@ bool isSource( vector<vector<int>> &g, int vertex )
     }
 
     return true;
+}
+
+bool isBridge( vector<vector<int>> &g, edge curr )
+{
+    int i, count = 0, size = g.size();
+
+    for ( i = 0; i < size; i++ )
+    {
+        if ( g[curr.from][curr.to] > 0 )
+            count++;
+    }
+
+    //use BFS to count reachable edges
+
+    return false;
 }
 
 

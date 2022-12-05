@@ -35,7 +35,7 @@ bool isEmpty( vector<vector<int>> &g );
 
 bool isSource( vector<vector<int>> &g, int vertex );
 
-bool isBridge( vector<vector<int>> &g, edge curr );
+
 
 
 class myGraph
@@ -57,7 +57,7 @@ public:
     vector<int> BFS( int s, int t );
     myGraph kruskalsMST( );
     bool isCyclicUndirected( int v, vector<bool> visited, int last );
-    myGraph eulerCicuit( );
+
     friend ostream& operator<<( ostream& out, myGraph &g );
     friend bool operator==( const myGraph &l, const myGraph &r );
     friend void readDot( ifstream &fin, myGraph &g );

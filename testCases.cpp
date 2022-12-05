@@ -807,8 +807,6 @@ TEST_CASE( "kruskal's" )
 
         tmp = g.kruskalsMST( );
 
-        cout << tmp << endl << endl << cmp << endl;
-
         REQUIRE( tmp == cmp );
     }
     SECTION( "in class example" )
@@ -837,6 +835,8 @@ TEST_CASE( "kruskal's" )
         myGraph g( t ), cmp( c ), tmp;
 
         tmp = g.kruskalsMST( );
+
+        cout << tmp << endl << endl << cmp << endl;
 
         REQUIRE( tmp == cmp );
     }

@@ -56,8 +56,6 @@ public:
     int FordFulkerson( int s, int t );
     vector<int> BFS( int s, int t );
     myGraph kruskalsMST( );
-    bool isCyclicUndirected( int v, vector<bool> visited, int last );
-
     friend ostream& operator<<( ostream& out, myGraph &g );
     friend bool operator==( const myGraph &l, const myGraph &r );
     friend void readDot( ifstream &fin, myGraph &g );

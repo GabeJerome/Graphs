@@ -319,6 +319,8 @@ myGraph myGraph::primsMST( int start )
     return result;
 }
 
+
+
 vector<string> myGraph::Dijkstra( int start )
 {
     vector<vector<int>> tmpMatrix = adjMatrix;
@@ -600,6 +602,21 @@ bool isSource( vector<vector<int>> &g, int vertex )
     }
 
     return true;
+}
+
+bool isBridge( vector<vector<int>> &g, edge curr )
+{
+    int i, count = 0, size = g.size();
+
+    for ( i = 0; i < size; i++ )
+    {
+        if ( g[curr.from][curr.to] > 0 )
+            count++;
+    }
+
+    //use BFS to count reachable edges
+
+    return false;
 }
 
 

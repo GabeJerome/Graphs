@@ -503,6 +503,21 @@ bool myGraph::isCyclicUndirected( int curr, vector<bool> visited, int last )
     return false;
 }
 
+myGraph myGraph::eulerCircuit( )
+{
+    int curr, count;
+    int i, j, size = adjMatrix.size();
+
+    //find start. If -1 graph is invalid
+    curr = findOddVertex( adjMatrix );
+    if ( curr == -1 )
+        return myGraph( );
+
+    
+
+    return myGraph( );
+}
+
 
 
 myGraph myGraph::kruskalsMST( )
@@ -600,6 +615,126 @@ bool isSource( vector<vector<int>> &g, int vertex )
     }
 
     return true;
+}
+
+int findOddVertex( vector<vector<int>> &g )
+{
+    int i, j, size = g.size(), sum;
+    int numOddVertices = 0;
+    int lastOdd;
+
+    //check for empty
+    if ( !g.empty( ) )
+        return -1;
+
+    //loop through each vertex
+    for ( i = 0; i < size && numOddVertices <= 2; i++ )
+    {
+        //initialize sum to 0
+        sum = 0;
+        for ( j = 0; j < size; j++ )
+        {
+            //check for outgoing edge
+            if ( g[i][j] > 0 )
+                sum++;
+        }
+
+        //if number of outgoing edges is odd
+        if ( sum % 2 != 0 )
+        {
+            //increase count and set lastOdd
+            numOddVertices++;
+            lastOdd = i;
+        }
+    }
+
+    //if number of odd vertices is 2, return one of them
+    if ( numOddVertices == 2 )
+        return lastOdd;
+
+    //if there are no odd vertices, return 0
+    if ( numOddVertices == 0 )
+        return 0;
+
+    //else there is no Euler circuit in this graph
+    return -1;
+}
+
+bool isNextValid( vector<vector<int>> &g,  int from, int to )
+{
+    int i, size = g.size(), count = 0;
+
+    for ( i = 0; i < size; i++ )
+    {
+        if ( g[from][i] > 0 )
+            count++;
+    }
+
+    if ( count == 1 )
+        return true;
+
+
+
+    return false;
+}
+
+//FINISH THIS
+int BFSCount( vector<vector<int>> g, int start )
+{
+    vector<vector<int>> result;
+    vector<bool> visited;
+    vector<int> temp;
+    priority_queue<edge> PQ;
+    int i, j, size = g.size( );
+    edge tmpEdge, curr;
+
+    //initialize all structures
+    for ( i = 0; i < size; i++ )
+    {
+        result.push_back( vector<int>( ) );
+        visited.push_back( false );
+    }
+
+    //set start
+    result[s] = { s };
+
+    //push start to queue
+    tmpEdge.from = s;
+    tmpEdge.to = s;
+    tmpEdge.cost = 0;
+    PQ.push( tmpEdge );
+
+    //while the queue is not empty
+    while ( !PQ.empty( ) )
+    {
+        //pop and top queue
+        curr = PQ.top( );
+        PQ.pop( );
+
+        //iterate through row for out-edges
+        for ( i = 0; i < size; i++ )
+        {
+            //if an edge exists, push it to the queue
+            if ( g[curr.to][i] > 0 && !visited[i] )
+            {
+                tmpEdge.from = curr.to;
+                tmpEdge.to = i;
+                tmpEdge.cost = g[tmpEdge.from][tmpEdge.to];
+                PQ.push( tmpEdge );
+                temp = result[curr.to];
+                temp.push_back( i );
+                result[i] = temp;
+
+                if ( i == t )
+                    return result[i];
+            }
+        }
+
+        //set visited to true for current vertex
+        visited[curr.to] = true;
+    }
+
+    return vector<int>( );
 }
 
 

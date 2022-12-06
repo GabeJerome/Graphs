@@ -35,7 +35,11 @@ bool isEmpty( vector<vector<int>> &g );
 
 bool isSource( vector<vector<int>> &g, int vertex );
 
+int findOddVertex( vector<vector<int>> &g );
 
+bool isNextValid( vector<vector<int>> &g, int from, int to );
+
+int BFSCount( vector<vector<int>> g, int start );
 
 
 class myGraph
@@ -57,7 +61,7 @@ public:
     vector<int> BFS( int s, int t );
     myGraph kruskalsMST( );
     bool isCyclicUndirected( int v, vector<bool> visited, int last );
-
+    myGraph eulerCircuit( );
     friend ostream &operator<<( ostream &out, myGraph &g );
     friend bool operator==( const myGraph &l, const myGraph &r );
     friend void readDot( ifstream &fin, myGraph &g );

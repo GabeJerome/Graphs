@@ -35,8 +35,9 @@ myGraph::myGraph( string fileName )
 
 
 
-myGraph::myGraph( vector<vector<int>> g )
+myGraph::myGraph( vector<vector<int>> &g )
 {
+    //set adjacency matrix to given
     adjMatrix = g;
 }
 
@@ -374,16 +375,17 @@ vector<string> myGraph::Dijkstra( int start )
 
 
 
-int myGraph::FordFulkerson( int s, int t )
+int myGraph::FordFulkerson( int s, int t, myGraph &residual )
 {
-    myGraph residual( adjMatrix );
+    residual = adjMatrix;
     vector<int> tmpPath = residual.BFS( s, t );
     int flow = 0, currFlow, i, size, curr, next;
 
+    //check for valid start and end
     if ( s < 0 || s >= adjMatrix.size( ) || t < 0 || t >= adjMatrix.size( ) )
         return -1;
 
-
+    //while a path can still be found
     while ( !tmpPath.empty( ) )
     {
         currFlow = INT_MAX;
@@ -393,6 +395,7 @@ int myGraph::FordFulkerson( int s, int t )
         {
             curr = tmpPath[i];
             next = tmpPath[i + 1];
+
             //if edge weight is smallest so far
             if ( residual.adjMatrix[curr][next] < currFlow )
                 currFlow = residual.adjMatrix[curr][next];
@@ -402,15 +405,16 @@ int myGraph::FordFulkerson( int s, int t )
         {
             curr = tmpPath[i];
             next = tmpPath[i + 1];
-            //if edge weight is smallest so far
             residual.adjMatrix[curr][next] -= currFlow;
             residual.adjMatrix[next][curr] += currFlow;
         }
 
+        //add to flow
         flow += currFlow;
+
+        //find next path
         tmpPath = residual.BFS( s, t );
     }
-
 
     return flow;
 }
@@ -530,6 +534,8 @@ void myGraph::makeDotFile( string &name )
     bool directed = isDirected( adjMatrix );
     int i, j, size = adjMatrix.size();
 
+
+    /**** CHANGE THIS BETWEEN CLION AND VS ****/
     fout.open( "../../../" + name + ".gv" );
     if ( !fout.is_open( ) )
     {
@@ -537,15 +543,17 @@ void myGraph::makeDotFile( string &name )
         return;
     }
 
+    //if graph is directed, change print options
     if ( directed )
     {
         header = "digraph A {";
         connector = " -> ";
     }
 
+    //print header
     fout << header << "\n";
 
-
+    //if directed, print every edge
     if ( directed )
     {
         for ( i = 0; i < size; i++ )
@@ -557,6 +565,7 @@ void myGraph::makeDotFile( string &name )
             }
         }
     }
+    //if undirected, only need to check half of matrix
     else
     {
         for ( i = 0; i < size; i++ )
@@ -569,8 +578,10 @@ void myGraph::makeDotFile( string &name )
         }
     }
 
+    //print close bracket
     fout << "}";
 
+    //close the output file
     fout.close( );
 }
 
@@ -584,6 +595,8 @@ myGraph myGraph::kruskalsMST( )
     myGraph g( size );
     vector<bool> visited( size, false );
 
+    //push all edges into a priority queue
+    //this will take care of choosing the smallest edge
     for ( i = 0; i < size; i++ )
     {
         for ( j = i; j < size; j++ )
@@ -598,22 +611,29 @@ myGraph myGraph::kruskalsMST( )
         }
     }
 
+    //while we have not reached every node or the PQ is not empty
     while ( edges < size - 1 && !PQ.empty( ) )
     {
+        //top and pop queue
         tmp = PQ.top( );
         PQ.pop( );
+
+        //add the edge from the queue and increase edge counter
         g.addEdge( tmp.from, tmp.to, tmp.cost );
         g.addEdge( tmp.to, tmp.from, tmp.cost );
         edges++;
 
+        //check if the added edge created an undirected cycle
         if ( g.isCyclicUndirected( tmp.to, visited, -1 ) )
         {
+            //if there is a cycle remove the edge and decrement the counter
             g.removeEdge( tmp.from, tmp.to );
             g.removeEdge( tmp.to, tmp.from );
             edges--;
         }
     }
 
+    //return the result
     return g;
 }
 
@@ -810,13 +830,18 @@ void eulerRecurs( vector<vector<int>> &cpy, myGraph &result, int curr )
 {
     int size = cpy.size( ), i;
 
+    //for every outgoing edge of the current vertex
     for ( i = 0; i < size; i++ )
     {
+        //if there is a valid edge
         if ( cpy[curr][i] > 0 && isNextValid( cpy, curr, i ) )
         {
+            //add the edge to the result and remove it from the current graph
             result.addEdge( curr, i, cpy[curr][i] );
             cpy[curr][i] = 0;
             cpy[i][curr] = 0;
+
+            //recursive call the vertex that the edge is connected to
             eulerRecurs( cpy, result, i );
         }
     }
@@ -826,6 +851,7 @@ bool isDirected( vector<vector<int>> &g )
 {
     int i, j, size = g.size( );
 
+    //check if matrix is symmetric
     for ( i = 0; i < size; i++ )
     {
         for ( j = i; j < size; j++ )
@@ -866,10 +892,12 @@ void readDot( ifstream &fin, myGraph &g )
             lines.push_back( temp );
         }
     }
-
+    
+    //determine if graph is directed
     if ( lines[0].find( "digraph" ) != string::npos )
         directed = true;
 
+    //get the size of the graph
     for ( i = 1; i < lines.size( ); i++ )
     {
         space = lines[i].find( " " );
@@ -885,22 +913,27 @@ void readDot( ifstream &fin, myGraph &g )
 
     myGraph tempGraph( size );
 
+    //parse through each line
     for ( i = 1; i < lines.size( ); i++ )
     {
+        //if a weight is given set it. Default = 1
         if ( lines[i].find( "weight" ) != string::npos )
             weight = stoi( lines[i].substr( lines[i].find( "=" ) + 1, string::npos ) );
         else
             weight = 1;
 
+        //get which vertices are connected
         space = lines[i].find( " " );
         first = stoi( lines[i].substr( 0, space ) );
         second = stoi( lines[i].substr( space, string::npos ) );
 
+        //add the edge to the graph
         tempGraph.addEdge( first, second, weight );
         if ( !directed )
             tempGraph.addEdge( second, first, weight );
     }
 
+    //set g
     g = tempGraph;
 }
 

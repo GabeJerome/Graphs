@@ -52,7 +52,7 @@ class myGraph
 public:
     myGraph( );
     myGraph( string filName );
-    myGraph( vector<vector<int>> g );       //This is here for testing purposes only
+    myGraph( vector<vector<int>> &g );       //This is here for testing purposes only
     myGraph( int size );
     ~myGraph( );
     void addEdge( int from, int to, int weight = 1 );
@@ -62,7 +62,7 @@ public:
     vector<string> shortestPath( int start );
     myGraph primsMST( int start );
     vector<string> Dijkstra( int start );
-    int FordFulkerson( int s, int t );
+    int FordFulkerson( int s, int t, myGraph &residual );
     vector<int> BFS( int s, int t );
     myGraph kruskalsMST( );
     bool isCyclicUndirected( int v, vector<bool> visited, int last );

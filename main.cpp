@@ -30,7 +30,7 @@ int main ( int argc, char **argv)
     }
 
     myGraph graph( argv[1] ), newGraph;
-    newGraph = graph.eulerCircuit( );
+    graph.FordFulkerson( 0, 3, newGraph );
     newGraph.makeDotFile( string( "test" ) );
 
     return 0;

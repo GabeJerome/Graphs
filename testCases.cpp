@@ -670,8 +670,8 @@ TEST_CASE( "Ford Fulkerson" )
             { 0, 0, 0, 0, 0, 3 },
             { 0, 0, 0, 0, 0, 0 }
         };
-        myGraph g( t );
-        int tmp = g.FordFulkerson( 0, 5 );
+        myGraph g( t ), residual;
+        int tmp = g.FordFulkerson( 0, 5, residual );
 
         REQUIRE( tmp == 5 );
     }
@@ -686,15 +686,15 @@ TEST_CASE( "Ford Fulkerson" )
             { 0, 0, 0, 0, 0, 2 },
             { 0, 0, 0, 0, 0, 0 }
         };
-        myGraph g( t );
-        int tmp = g.FordFulkerson( 0, 5 );
+        myGraph g( t ), residual;
+        int tmp = g.FordFulkerson( 0, 5, residual );
 
         REQUIRE( tmp == 3 );
     }
     SECTION( "g4" )
     {
-        myGraph g( "g4.gv" );
-        int tmp = g.FordFulkerson( 0, 3 );
+        myGraph g( "g4.gv" ), residual;
+        int tmp = g.FordFulkerson( 0, 3, residual );
 
         REQUIRE( tmp == 12 );
     }
@@ -806,8 +806,6 @@ TEST_CASE( "kruskal's" )
         myGraph g( t ), cmp( c ), tmp;
 
         tmp = g.kruskalsMST( );
-
-        cout << tmp << endl << endl << cmp << endl;
 
         REQUIRE( tmp == cmp );
     }

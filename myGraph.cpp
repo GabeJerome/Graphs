@@ -685,7 +685,7 @@ int BFSCount( vector<vector<int>> g, int start )
     vector<bool> visited;
     vector<int> temp;
     priority_queue<edge> PQ;
-    int i, j, size = g.size( );
+    int i, j, size = g.size( ), count = 0;
     edge tmpEdge, curr;
 
     //initialize all structures
@@ -696,11 +696,11 @@ int BFSCount( vector<vector<int>> g, int start )
     }
 
     //set start
-    result[s] = { s };
+    result[start] = { start };
 
     //push start to queue
-    tmpEdge.from = s;
-    tmpEdge.to = s;
+    tmpEdge.from = start;
+    tmpEdge.to = start;
     tmpEdge.cost = 0;
     PQ.push( tmpEdge );
 
@@ -710,6 +710,9 @@ int BFSCount( vector<vector<int>> g, int start )
         //pop and top queue
         curr = PQ.top( );
         PQ.pop( );
+
+        if ( !visited[curr.to] )
+            count++;
 
         //iterate through row for out-edges
         for ( i = 0; i < size; i++ )
@@ -721,12 +724,6 @@ int BFSCount( vector<vector<int>> g, int start )
                 tmpEdge.to = i;
                 tmpEdge.cost = g[tmpEdge.from][tmpEdge.to];
                 PQ.push( tmpEdge );
-                temp = result[curr.to];
-                temp.push_back( i );
-                result[i] = temp;
-
-                if ( i == t )
-                    return result[i];
             }
         }
 
@@ -734,7 +731,7 @@ int BFSCount( vector<vector<int>> g, int start )
         visited[curr.to] = true;
     }
 
-    return vector<int>( );
+    return --count;
 }
 
 

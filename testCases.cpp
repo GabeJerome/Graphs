@@ -874,3 +874,44 @@ TEST_CASE( "kruskal's" )
         REQUIRE( tmp == cmp );
     }
 }
+
+
+
+TEST_CASE( "BFSCount" )
+{
+    SECTION( "g1.gv" )
+    {
+        vector<vector<int>> g =
+        {
+            { 0, 1, 0, 0, 1, 1 },
+            { 1, 0, 1, 1, 0, 1 },
+            { 0, 1, 0, 1, 0, 0 },
+            { 0, 1, 1, 0, 1, 1 },
+            { 1, 0, 0, 1, 0, 1 },
+            { 1, 1, 0, 1, 1, 0 }
+        };
+        int result;
+
+        result = BFSCount( g, 2 );
+        
+        REQUIRE( result == 5 );
+    }
+    SECTION( "g1.gv modified" )
+    {
+        vector<vector<int>> g =
+        {
+            { 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 1, 1, 0, 1 },
+            { 0, 1, 0, 1, 0, 0 },
+            { 0, 1, 1, 0, 1, 1 },
+            { 0, 0, 0, 1, 0, 1 },
+            { 0, 1, 0, 1, 1, 0 }
+        };
+        int result;
+
+        result = BFSCount( g, 2 );
+        
+        REQUIRE( result == 4 );
+    }
+
+}

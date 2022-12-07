@@ -22,16 +22,10 @@ int main ( int argc, char **argv)
     }
 
     //check command line arguments
-    if(argc != 2)
-    {
-        cout << "Incorrect command line arguments." << endl;
-        cout << "Usage: Graphs.exe [graphFileName]" << endl;
+    if ( !checkArgs( argc ) )
         return 1;
-    }
 
-    myGraph graph( argv[1] ), newGraph;
-    graph.FordFulkerson( 0, 3, newGraph );
-    newGraph.makeDotFile( string( "test" ) );
+    callFuncs( argv, argc );
 
     return 0;
 }

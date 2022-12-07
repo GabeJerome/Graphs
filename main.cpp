@@ -29,9 +29,9 @@ int main ( int argc, char **argv)
         return 1;
     }
 
-    myGraph graph( argv[1] );
-    cout << graph.primsMST( 2 );
-
+    myGraph graph( argv[1] ), newGraph;
+    newGraph = graph.eulerCircuit( );
+    newGraph.makeDotFile( string( "test" ) );
 
     return 0;
 }

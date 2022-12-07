@@ -910,8 +910,52 @@ TEST_CASE( "BFSCount" )
         int result;
 
         result = BFSCount( g, 2 );
-        
+
         REQUIRE( result == 4 );
+    }
+}
+
+
+
+TEST_CASE( "eulerCircuit" )
+{
+    SECTION( "g2.gv" )
+    {
+        vector<vector<int>> tmp =
+        {
+            { 0, 1, 0, 0, 1, 0, 0 },
+            { 0, 0, 1, 0, 0, 0, 3 },
+            { 0, 0, 0, 1, 0, 0, 0 },
+            { 0, 7, 0, 0, 0, 0, 1 },
+            { 0, 0, 0, 4, 0, 2, 0 },
+            { 6, 0, 0, 0, 0, 0, 0 },
+            { 1, 0, 0, 0, 5, 0, 0 }
+        };
+        myGraph g( "g2.gv" ), result, cmp( tmp );
+
+        result = g.eulerCircuit( );
+
+        REQUIRE( result == cmp );
+    }
+    SECTION( "g2.gv modified" )
+    {
+        vector<vector<int>> tmp =
+        {
+            { 0, 1, 0, 0, 0, 6, 0 },
+            { 0, 0, 1, 0, 0, 0, 0 },
+            { 0, 0, 0, 1, 0, 0, 0 },
+            { 0, 7, 0, 0, 4, 0, 0 },
+            { 1, 0, 0, 0, 0, 0, 5 },
+            { 0, 0, 0, 0, 2, 0, 0 },
+            { 1, 0, 0, 1, 0, 0, 0 }
+        };
+        myGraph g( "g2.gv" ), result, cmp( tmp );
+        g.removeEdge( 1, 6 );
+        g.removeEdge( 6, 1 );
+
+        result = g.eulerCircuit( );
+
+        REQUIRE( result == cmp );
     }
 
 }

@@ -18,6 +18,8 @@ using namespace std;
 #ifndef GRAPHS_MYGRAPH_H
 #define GRAPHS_MYGRAPH_H
 
+class myGraph;
+
 struct edge
 {
     int from = 0;
@@ -37,10 +39,13 @@ bool isSource( vector<vector<int>> &g, int vertex );
 
 int findOddVertex( vector<vector<int>> &g );
 
-bool isNextValid( vector<vector<int>> &g, int from, int to );
+bool isNextValid( vector<vector<int>> g, int from, int to );
 
 int BFSCount( vector<vector<int>> g, int start );
 
+void eulerRecurs( vector<vector<int>> &cpy, myGraph &result, int curr );
+
+bool isDirected( vector<vector<int>> &g );
 
 class myGraph
 {
@@ -62,6 +67,7 @@ public:
     myGraph kruskalsMST( );
     bool isCyclicUndirected( int v, vector<bool> visited, int last );
     myGraph eulerCircuit( );
+    void makeDotFile( string &name);
     friend ostream &operator<<( ostream &out, myGraph &g );
     friend bool operator==( const myGraph &l, const myGraph &r );
     friend void readDot( ifstream &fin, myGraph &g );

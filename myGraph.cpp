@@ -507,15 +507,71 @@ myGraph myGraph::eulerCircuit( )
 {
     int curr, count;
     int i, j, size = adjMatrix.size();
+    myGraph result( size );
+    vector<vector<int>> cpy = adjMatrix;
 
-    //find start. If -1 graph is invalid
-    curr = findOddVertex( adjMatrix );
+    //find start. If -1, graph is invalid
+    curr = findOddVertex( cpy );
     if ( curr == -1 )
         return myGraph( );
 
-    
 
-    return myGraph( );
+    //function call
+    eulerRecurs( cpy, result, curr );
+
+    return result;
+}
+
+void myGraph::makeDotFile( string &name )
+{
+    ofstream fout;
+    string header = "graph A {";
+    string connector = " -- ";
+    bool directed = isDirected( adjMatrix );
+    int i, j, size = adjMatrix.size();
+
+    fout.open( "../../../" + name + ".gv" );
+    if ( !fout.is_open( ) )
+    {
+        cout << "Could not open file: " << name << ".gv" << endl;
+        return;
+    }
+
+    if ( directed )
+    {
+        header = "digraph A {";
+        connector = " -> ";
+    }
+
+    fout << header << "\n";
+
+
+    if ( directed )
+    {
+        for ( i = 0; i < size; i++ )
+        {
+            for ( j = 0; j < size; j++ )
+            {
+                if ( adjMatrix[i][j] > 0 )
+                    fout << "\t" << i << connector << j << " [weight = " << adjMatrix[i][j] << "]\n";
+            }
+        }
+    }
+    else
+    {
+        for ( i = 0; i < size; i++ )
+        {
+            for ( j = i; j < size; j++ )
+            {
+                if ( adjMatrix[i][j] > 0 )
+                    fout << "\t" << i << connector << j << " [weight = " << adjMatrix[i][j] << "]\n";
+            }
+        }
+    }
+
+    fout << "}";
+
+    fout.close( );
 }
 
 
@@ -624,7 +680,7 @@ int findOddVertex( vector<vector<int>> &g )
     int lastOdd;
 
     //check for empty
-    if ( !g.empty( ) )
+    if ( g.empty( ) )
         return -1;
 
     //loop through each vertex
@@ -660,25 +716,39 @@ int findOddVertex( vector<vector<int>> &g )
     return -1;
 }
 
-bool isNextValid( vector<vector<int>> &g,  int from, int to )
+bool isNextValid( vector<vector<int>> g,  int from, int to )
 {
-    int i, size = g.size(), count = 0;
+    int i, size = g.size( );
+    int count = 0, count1, count2, cost = g[from][to];
 
+    //count out edges
     for ( i = 0; i < size; i++ )
     {
         if ( g[from][i] > 0 )
             count++;
     }
 
+    //if this is the only out edge, it is valid
     if ( count == 1 )
         return true;
 
+    //get number of reachable edges
+    count1 = BFSCount( g, from );
 
+    //remove edge
+    g[from][to] = 0;
 
-    return false;
+    //get new number of reachable edges
+    count2 = BFSCount( g, from );
+
+    //add edge back
+    g[from][to] = cost;
+
+    // if count1 is greater, this edge is not valid
+    return (count1 > count2 ) ? false : true;
 }
 
-//FINISH THIS
+
 int BFSCount( vector<vector<int>> g, int start )
 {
     vector<vector<int>> result;
@@ -732,6 +802,40 @@ int BFSCount( vector<vector<int>> g, int start )
     }
 
     return --count;
+}
+
+
+
+void eulerRecurs( vector<vector<int>> &cpy, myGraph &result, int curr )
+{
+    int size = cpy.size( ), i;
+
+    for ( i = 0; i < size; i++ )
+    {
+        if ( cpy[curr][i] > 0 && isNextValid( cpy, curr, i ) )
+        {
+            result.addEdge( curr, i, cpy[curr][i] );
+            cpy[curr][i] = 0;
+            cpy[i][curr] = 0;
+            eulerRecurs( cpy, result, i );
+        }
+    }
+}
+
+bool isDirected( vector<vector<int>> &g )
+{
+    int i, j, size = g.size( );
+
+    for ( i = 0; i < size; i++ )
+    {
+        for ( j = i; j < size; j++ )
+        {
+            if ( g[i][j] != g[j][i] )
+                return true;
+        }
+    }
+
+    return false;
 }
 
 

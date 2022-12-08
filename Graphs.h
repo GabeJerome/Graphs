@@ -12,4 +12,4 @@ void callFuncs( char **argv, int argc );
 
 void printCycle( vector<int> &cycle );
 
-void printPaths( vector<string> &paths );
+void printPaths( vector<string> &paths, int start );

@@ -55,6 +55,7 @@ public:
     myGraph( vector<vector<int>> &g );       //This is here for testing purposes only
     myGraph( int size );
     ~myGraph( );
+    bool isEmpty( );
     void addEdge( int from, int to, int weight = 1 );
     void removeEdge( int from, int to );
     vector<int> findCycle( );

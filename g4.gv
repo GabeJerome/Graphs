@@ -1,11 +1,12 @@
-digraph g{
+digraph sdflkj{
 	0 -> 1 [weight = 4]
-	0 -> 3 [weight = 9]
-	1 -> 2 [weight = 2]
-	1 -> 5 [weight = 2]
-	2 -> 4 [weight = 6]
+	0 -> 3 [weight =9]
+	//this is comment
+	1 -> 2 [ weight = 2 ]
+	1 -> 5 [weight= 2]
+	2 -> 4 [weight = 6] //this is an inline comment
 	2 -> 5 [weight = 7]
 	4 -> 3 [weight = 2]
 	4 -> 5
-	5 -> 3
+	5 -> 3 //this weight would be 1
 }

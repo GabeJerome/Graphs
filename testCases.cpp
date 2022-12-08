@@ -218,12 +218,8 @@ TEST_CASE( "topologicalSort" )
         {
             { 1 }
         };
-        vector<vector<int>> c =
-        {
-            { 0 }
-        };
 
-        myGraph g( t ), cmp( c ), tmp;
+        myGraph g( t ), cmp, tmp;
 
         tmp = g.topologicalSort( );
 
@@ -383,24 +379,8 @@ TEST_CASE( "topologicalSort" )
             {0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0}
         };
-        vector<vector<int>> c =
-        {
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 
-        };
-
-        myGraph g( t ), cmp( c ), tmp;
+        myGraph g( t ), cmp, tmp;
 
         tmp = g.topologicalSort( );
 
@@ -517,6 +497,23 @@ TEST_CASE( "primsMST" )
 
         REQUIRE( tmp == cmp );
     }
+    SECTION( "invalid start" )
+    {
+        vector<vector<int>> t =
+        {
+            { 0, 1, 0, 0, 0 },
+            { 1, 0, 3, 2, 8 },
+            { 0, 3, 0, 0, 0 },
+            { 0, 2, 0, 0, 4 },
+            { 0, 8, 0, 4, 0 }
+        };
+
+        myGraph g( t ), cmp, tmp;
+
+        tmp = g.primsMST( 8 );
+
+        REQUIRE( tmp == cmp );
+    }
     SECTION( "in class example" )
     {
         vector<vector<int>> c =
@@ -593,7 +590,6 @@ TEST_CASE( "readDot" )
         myGraph g( "g1.gv" ), c( "g1.txt" );
         sout1 << g;
         sout2 << c;
-        //cout << g << endl << endl << c;
 
         REQUIRE( sout1.str( ) == sout2.str( ) );
     }
@@ -602,7 +598,6 @@ TEST_CASE( "readDot" )
         myGraph g( "g2.gv" ), c( "g2.txt" );
         sout1 << g;
         sout2 << c;
-        //cout << g << endl << endl << c;
 
         REQUIRE( sout1.str( ) == sout2.str( ) );
     }
@@ -611,7 +606,6 @@ TEST_CASE( "readDot" )
         myGraph g( "g3.gv" ), c( "g3.txt" );
         sout1 << g;
         sout2 << c;
-        //cout << g << endl << endl << c;
 
         REQUIRE( sout1.str( ) == sout2.str( ) );
     }
@@ -620,7 +614,6 @@ TEST_CASE( "readDot" )
         myGraph g( "g4.gv" ), c( "g4.txt" );
         sout1 << g;
         sout2 << c;
-        //cout << g << endl << endl << c;
 
         REQUIRE( sout1.str( ) == sout2.str( ) );
     }

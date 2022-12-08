@@ -25,6 +25,7 @@ int main ( int argc, char **argv)
     if ( !checkArgs( argc ) )
         return 1;
 
+    //determine what function to call
     callFuncs( argv, argc );
 
     return 0;

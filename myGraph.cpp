@@ -31,6 +31,8 @@ myGraph::myGraph( string fileName )
         readDot( fin, *this );
     else
         readAdjMatrix( fin, *this );
+
+    fin.close( );
 }
 
 
@@ -60,6 +62,11 @@ myGraph::myGraph( int size )
 
 myGraph::~myGraph( )
 {
+}
+
+bool myGraph::isEmpty( )
+{
+    return( adjMatrix.empty() ) ? true : false;
 }
 
 void myGraph::addEdge( int from, int to, int weight )
@@ -157,7 +164,7 @@ myGraph myGraph::topologicalSort( )
 
     //determine if it is acyclic
     if ( !findCycle( ).empty( ) )
-        return result;
+        return myGraph();
 
     //create a temp matrix to preserve original
     tmpMatrix = adjMatrix;
@@ -208,10 +215,13 @@ vector<string> myGraph::shortestPath( int start )
     queue<int> Q;
     int i, j, curr, size = adjMatrix.size( );
 
+    if ( start >= size || start < 0 )
+        return vector<string>( size, to_string(start ) );
+
     //initialize all structures
     for ( i = 0; i < size; i++ )
     {
-        result.push_back( "" + start );
+        result.push_back( to_string(start) );
         visited.push_back( false );
         distance.push_back( INT_MAX );
     }
@@ -270,7 +280,7 @@ myGraph myGraph::primsMST( int start )
 
     //check for valid starting point
     if ( start >= size || start < 0 )
-        return result;
+        return myGraph();
 
     //check starting vertex for outgoing edges
     for ( i = 0; i < size; i++ )
@@ -328,6 +338,9 @@ vector<string> myGraph::Dijkstra( int start )
     vector<int> distance;
     queue<int> Q;
     int i, j, curr, size = adjMatrix.size( );
+
+    if ( start < 0 || start >= size )
+        return vector<string>( );
 
     //initialize all structures
     for ( i = 0; i < size; i++ )
@@ -879,7 +892,7 @@ void readDot( ifstream &fin, myGraph &g )
         //ignore comments
         auto t = temp.find( "//" );
         if ( t != string::npos )
-            temp.erase( t, string::npos );
+            temp.erase( t - 1, string::npos );
 
         //ignore empty lines
         if ( !temp.empty( ) && temp.find_first_of( "{}" ) == string::npos || temp.find( "raph" ) != string::npos )
